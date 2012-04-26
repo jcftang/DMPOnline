@@ -1,0 +1,13 @@
+= semantic_form_for [:admin, @document] do |f|
+  = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :name
+    = f.input :edition
+    = f.input :organisation, :label => :organisation_id, :collection => current_user.org_list, :input_html => { :disabled => !@document.new_record? }, :required => true
+    = f.input :description, :input_html => { :class => 'wysiwyg' }
+    = f.input :attachment
+    = f.input :visible, :as => :select, :collection => [["Yes", true], ["No", false]]
+    = f.input :position, :as => :select, :collection => (-10..10)
+    = f.input :locale, :as => :select, :collection => supported_locales
+    = f.input :icon
+
+  = f.buttons

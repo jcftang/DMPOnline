@@ -1,0 +1,28 @@
+$secondary-gradient-start: #efefef;
+$secondary-gradient-stop: #dfe1e2;
+
+@mixin gradient($start, $end){ 
+  background: $start; /*fallback for non-CSS3 browsers*/
+  background: -webkit-gradient(linear, 0 0, 0 100%, from($start) to($end)); /*old webkit*/
+  background: -webkit-linear-gradient($start, $end); /*new webkit*/
+  background: -moz-linear-gradient(-90deg, $start, $end); /*gecko*/
+  background: -ms-linear-gradient($start, $end); /*IE10*/
+  background: -o-linear-gradient($start, $end); /*opera 11.10+*/
+  background: linear-gradient($start, $end); /*future CSS3 browsers*/
+  -pie-background: linear-gradient($start, $end); /*PIE*/
+  behavior: url(/assets/PIE.htc);
+}
+
+@mixin primary-gradient { 
+  @include gradient(lighten($primary-color, 5%), darken($primary-color, 7%));
+  border-bottom: 1px solid darken($primary-color, 11%);
+}
+
+@mixin secondary-gradient { 
+  @include gradient($secondary-gradient-start, $secondary-gradient-stop);
+}
+
+@mixin no-gradient {
+  background: none;
+  -pie-background: none; /*PIE*/
+}

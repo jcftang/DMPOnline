@@ -1,0 +1,71 @@
+= DMPOnline
+
+DMPOnline is the DCC's data management planning tool, available at https://dmponline.dcc.ac.uk
+
+Development of the DMPOnline by the Digital Curation Centre has been funded by JISC.  JISC inspires UK colleges and universities in the innovative use of digital technologies, helping to maintain the UK's position as a global leader in education. www.jisc.ac.uk
+
+This is just the application code, none of the accompanying question data available at https://dmponline.dcc.ac.uk is included.
+
+The tool has three main functions
+1. To help create and maintain different versions of Data Management Plans;
+2. To provide useful guidance on data management issues and how to meet research funders' requirements;
+3. To export attractive and useful plans in a variety of formats.
+
+== Documentation & Support
+
+* On its way... in the meantime, please email info@dcc.ac.uk
+
+== Bugs & Feature Requests
+
+* Bug Reports & Feature Requests: https://github.com/DigitalCurationCentre/dmponline3/issues
+
+== Getting Started
+
+DMPOnline is a Ruby on Rails application.  Further details on how to install Ruby on Rails applications 
+are available from http://rubyonrails.org
+
+
+
+After downloading, create a <tt>config/database.yml</tt> file based on the provided <tt>config/database_example.yml</tt> file.
+Currently only MySQL databases are supported.
+
+Edit the configuration files at <tt>config/environments</tt> to include your contact email addresses.
+
+Edit the configuration setting <tt>config.action_mailer.default_url_options</tt> in <tt>config/application.rb</tt>
+
+Edit values for <tt>config.mailer_sender</tt> and <tt>config.pepper</tt> in <tt>config/initializers/devise.rb</tt>
+
+Set a secret token in <tt>config/initializers/secret_token.rb</tt>
+
+You'll need to install gems, build the database and then start the server:
+
+  $> bundle install
+  $> rake db:setup
+  $> rails server
+
+The database seed data will give you three users:
+
+admin@example.com:: Full system admin user
+organisation@example.com:: A dummy organisation admin user
+user@example.com:: A normal end user
+
+The password for each of these is 'password'
+
+== Tools Being Used
+DMPOnline is built using a number of other open source projects
+
+Active Admin::
+  A framework fir creating administration-style interfaces.
+Formtastic::
+  A DSL for semantically building forms.
+Devise::
+  User authentication is done using Devise
+Highcharts JS::
+  JavaScript library for creating interactive charts.  Not free for commercial use: http://shop.highsoft.com/highcharts.html
+Iconic Icons::
+  SVG icon set designed by P.J. Onori: http://somerandomdude.com/projects/iconic
+
+
+== Copyright
+
+Copyright (c) 2012 Digital Curation Centre, University of Edinburgh. See LICENSE for details.

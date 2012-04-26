@@ -1,0 +1,20 @@
+- if @page.nil?
+  - title t('activerecord.models.document.other')
+- else
+  - title @page.title
+  .static_body= sanitize @page.body
+  
+- unless @documents.blank?
+  .panel_contents
+    - @documents.each do |document|
+      .document_box
+        .document_link
+          - unless document.icon.blank?
+            = link_to(image_tag(document.icon.url(:thumb), :align => :left, :border => 0), document.attachment.url)
+          %span.download_link= link_to("[#{t('dmp.download')}]", document.attachment.url)
+        .document_text
+          .document_name= document.name
+          .document_version= "Version #{document.edition}"
+          .document_description= sanitize(document.description)
+          
+  .pagination= paginate @documents

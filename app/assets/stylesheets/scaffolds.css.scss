@@ -1,0 +1,78 @@
+@import "dmponline/mixins/variables";
+
+body {
+  background-color: #fff;
+  color: #333;
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 18px; }
+
+p, ol, ul, td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 18px; }
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px; }
+
+a {
+  color: $orange;
+  &:visited {
+    color: $orange; }
+  &:hover {
+    color: $green; } }
+ 
+div {
+  &.field, &.actions {
+    margin-bottom: 10px; } }
+
+#notice {
+  color: $green; }
+
+.field_with_errors {
+  display: inline;
+  label {
+    color: $red;
+  }
+  input {
+    border-color: lighten($red, 35%) !important;
+  }
+}
+
+#error_explanation {
+  h2 {
+    text-align: left;
+    font-weight: bold;
+    font-size: 100%;
+    padding: 0 0;
+    color: inherit;
+  }
+  ul {
+    padding: 0 0;
+    li {
+      font-size: 100%;
+      list-style: square; 
+      margin-left: 3em; 
+    }
+  } 
+}
+
+label {
+  display: block;
+  text-align: right;
+  width: 20%;
+  float: left; 
+  clear: left;
+  vertical-align: bottom; }
+    
+input:not([type]), input[type="color"], input[type="date"], input[type="datetime"], input[type="datetime-local"], 
+input[type="email"], input[type="month"], input[type="number"], input[type="password"], input[type="tel"], 
+input[type="text"], input[type="time"], input[type="url"], input[type="week"] {
+  padding:4px 2px;
+  margin:2px 0 20px 10px; }
+  
+input[type="checkbox"] {
+  padding:4px 2px;
+  margin:2px 0 20px 10px; }

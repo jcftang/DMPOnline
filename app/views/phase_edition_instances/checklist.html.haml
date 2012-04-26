@@ -1,0 +1,28 @@
+- title t('dmp.admin.checklist')
+
+- used = Answer.select(:dcc_question_id).where(phase_edition_instance_id: @phase_edition_instance.id, hidden: false).collect {|a| a.dcc_question_id }
+- checklist = dcc_checklist_questions(@phase_edition_instance.edition)
+
+.index_as_table
+%table.index_table.checklist
+  %thead
+    %tr
+      %th
+      %th= t('dmp.admin.select_checklist')
+      %th= t('dmp.admin.actions')
+  %tbody
+    - checklist.each do |q|
+      %tr{class: "#{cycle("odd", "even")} #{q.kind} #{q.parent_id.nil? ? 'top-level' : ''}"}
+        %td.number
+          = q.number_display
+        %td.text
+          = strip_tags q.question
+        - if q.is_heading? || q.is_mapped?
+          %td
+        - else
+          %td.action
+            - unless used.include?(q.id)
+              = link_to t('dmp.admin.add_model', :model => t('activerecord.models.question.one')), add_answer_plan_layer_path(:dcc_question => q), class: 'create_link', method: :post
+            - else
+              %span.disabled_link= t('dmp.admin.add_model', :model => t('activerecord.models.question.one'))
+

@@ -1,0 +1,25 @@
+%li.nested-fields
+  .mappings
+    = f.inputs do
+      .drag-button{:title => t('dmp.admin.drag')}
+        = image_tag("white/vertical.png", {:class => "handle"})
+
+      = f.submit :name => "mappings_#{f.object.id}", :value => t('dmp.admin.set_guidance_boilerplate'), :class => 'update mapping_text'
+
+      .extras_status
+        - unless f.object.guide.nil?
+          %span.status
+            = t('dmp.admin.has_guidance')
+        - bp_count = f.object.boilerplate_texts.count
+        - if bp_count > 0
+          %span.status
+            = t('dmp.admin.has_boilerplate', :number => bp_count)
+
+      .question_label
+        DCC
+        = dcc_numbers[f.object.dcc_question_id]
+        &nbsp;
+        = sanitize f.object.dcc_question.question
+   
+      = f.input :position, wrapper_html: {:class => "sort-position"}, :hint => t('dmp.admin.sort_hint')
+      

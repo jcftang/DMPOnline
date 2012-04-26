@@ -1,0 +1,58 @@
+- title t('dmp.project_access')
+
+.share_description= t('dmp.share_description')
+
+#rights_tabs
+  -if @plan.template_instances.count > 1
+    %ul.share
+      %li{class: (@plan.simple_rights? ? 'ui-tabs-selected' : '')}= link_to t('dmp.simple_share'), '#share_simple'
+      %li{class: (@plan.simple_rights? ? '' : 'ui-tabs-selected')}= link_to t('dmp.advanced_share'), '#share_advanced'
+
+  #share_simple
+    - ti = @plan.template_instances.first
+    = semantic_form_for ti, url: update_rights_plan_path(@plan) do |s|
+      .plan_wrapper
+        .rights_block
+          .panel
+            %h3= "#{t('dmp.share_all')}"
+            .panel_contents
+              = s.inputs :class => 'inputs cocoon' do
+                - @plan.common_rights.each do |tir|
+                  - Rails.logger.debug tir.inspect
+                  = s.semantic_fields_for :template_instance_rights, tir do |ftir|
+                    = render 'template_instance_right_fields', :f => ftir
+                .links
+                  - if can? :manage, @plan
+                    = link_to_add_association image_tag('plus.png', {:alt => "#{t('dmp.admin.add_model', model: t('activerecord.models.template_instance_right.one'))}"}), s, :template_instance_rights
+
+      = s.buttons do
+        %li.button= link_to t('dmp.cancel'), plan_path(@plan), class: 'cancel_link'
+        - if can? :manage, @plan
+          = s.commit_button t('dmp.update_rights')
+        - else
+          %span.disabled_link= t('dmp.update_rights')
+
+  - if @plan.template_instances.count > 1
+    #share_advanced  
+      = semantic_form_for @plan, url: update_rights_plan_path(@plan) do |p|
+        .plan_wrapper
+          - @plan.template_instances.for_user(current_user).each do |ti|
+            = p.semantic_fields_for :template_instances, ti do |f|
+              .rights_block
+                .panel
+                  %h3= "#{ti.template.organisation.short_name} #{ti.template.name}"
+                  .panel_contents
+                    = f.inputs :class => 'inputs cocoon' do
+                      - ti.template_instance_rights.each do |tir|
+                        = f.semantic_fields_for :template_instance_rights, tir do |ftir|
+                          = render 'template_instance_right_fields', :f => ftir
+                      .links
+                        - if can? :manage, @plan
+                          = link_to_add_association image_tag('plus.png', {:alt => "#{t('dmp.admin.add_model', model: t('activerecord.models.template_instance_right.one'))}"}), f, :template_instance_rights
+
+        = p.buttons do
+          %li.button= link_to t('dmp.cancel'), plan_path(@plan), class: 'cancel_link'
+          - if can? :manage, @plan
+            = p.commit_button t('dmp.update_rights')
+          - else
+            %span.disabled_link= t('dmp.update_rights')

@@ -1,0 +1,15 @@
+.front
+  - if @page.nil?
+    -title 'Welcome to DMP Online'
+    %p
+      Content for page with slug 'home' will be displayed here
+  - else
+    - title @page.title
+    = sanitize @page.body
+
+  %ul.menuitem
+    %li= link_to(t('dmp.start_plan'), new_plan_path)
+    %li= link_to(t('dmp.return_plans'), plans_path)
+
+#sidebar
+  #news_sidebar_section{:class => "sidebar_section panel"}= raw @news_block

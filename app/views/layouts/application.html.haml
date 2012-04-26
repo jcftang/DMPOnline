@@ -1,0 +1,43 @@
+!!! Strict
+%html{:lang => I18n.locale.to_s}
+  %head
+    %meta{:content => 'text/html; charset=utf-8', 'http-equiv' => 'Content-Type'}
+    %title= "#{t('dmp.title')} - #{content_for?(:title) ? yield(:title) : t('dmp.strapline')}"
+    = stylesheet_link_tag 'application'
+    = stylesheet_link_tag 'print', media: 'print'
+    /[if IE 6]
+      = stylesheet_link_tag 'formtastic_ie6'
+    /[if IE 7]
+      = stylesheet_link_tag 'formtastic_ie7'
+      = stylesheet_link_tag 'dmponline_ie7'
+    /[if IE 8]
+      = stylesheet_link_tag 'dmponline_ie7'
+    = organisation_stylesheet
+      
+    = javascript_include_tag 'application'
+
+    - unless no_rss_feed
+      = auto_discovery_link_tag(:rss, :controller => 'posts', :action => 'index', :format => :rss) 
+    = csrf_meta_tag 
+    
+  %body{:class => user_signed_in? ? 'logged_in' : 'logged_out'}
+    = render :partial => 'layouts/dccbanner'
+    #wrapper
+      #header
+        = render :partial => 'layouts/utilitynav'
+        = link_to organisation_logo, frontpage_path
+        = render :partial => 'layouts/navmenu'
+        = render :partial => 'layouts/helpmenu'
+      .notices
+        - flash.each do |type, message|
+          = content_tag :div, message, :class => "flash flash_#{type}"
+        - if content_for?(:error_notices) 
+          %div{class: "flash flash_error"}
+            = yield(:error_notices)
+      .outer_wrapper
+        %h1.heading= content_for?(:title) ? yield(:title) : t('dmp.title')
+        #main= yield
+  
+        = render :partial => 'layouts/footer'
+    - unless user_signed_in?
+      = render :partial => 'layouts/loginform'

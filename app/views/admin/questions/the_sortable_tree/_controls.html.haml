@@ -1,0 +1,11 @@
+-# EDIT
+- edit = link_to t("dmp.admin.edit"), polymorphic_url([:admin, node], :action => :edit), :class => "edit_link"
+
+-# DELETE
+- if opts[:has_childs]
+  - delete = link_to t("dmp.admin.delete"), url_for([:admin, node]), :method => :delete, :confirm => t("dmp.admin.delete_confirm"), :class => "delete_link"
+- else
+  - delete = link_to_function t('dmp.admin.delete'), "alert('#{t('dmp.admin.delete_nested_elements')}')", :class => "disabled_link"
+    
+-# OUTPUT
+= edit + delete

@@ -1,0 +1,12 @@
+- title t('dmp.auth.forgot_pass')
+- error_notices devise_error_messages!
+
+= semantic_form_for :user, :url => password_path(:user), :html => { :method => :post } do |f|
+
+  = f.inputs do
+    = f.input :email
+  
+  = f.buttons do
+    = f.commit_button t('dmp.auth.send_pass')
+
+= render :partial => "devise/shared/links"

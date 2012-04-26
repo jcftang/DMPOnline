@@ -1,0 +1,52 @@
+- if @plan.errors.any?
+  - error_notices render(partial: "/layouts/errormessages", locals: {errors: @plan.errors})
+
+= semantic_form_for @plan do |f|
+  .plan_left_column
+    %h2.step= t('dmp.plan_create_step_1')
+    = f.inputs do
+      = f.input :project
+      = f.input :currency 
+      = f.input :budget, input_html: {value: number_with_precision(@plan.budget, precision: 2)}
+      = f.input :start_date
+      = f.input :end_date
+      = f.input :lead_org
+      = f.input :other_orgs
+
+    = f.buttons do
+      = f.commit_button
+      - if @plan.new_record? 
+        %li.button= link_to t('dmp.cancel'), plans_path, {class: "cancel_link"}
+      - else
+        %li.button= link_to t('dmp.cancel'), plan_path(@plan), {class: "cancel_link"}
+
+  
+  .plan_right_column
+    %h2.step= t('dmp.plan_create_step_2')
+    %h3= t('dmp.templates')
+    - template_list = current_user.plan_templates(current_organisation)
+    - if template_list.any?
+      - template_list.group_by(&:organisation_type_id).each do |orgtype, g|
+        - group_title = g.first.organisation_type_title.blank? ? t('dmp.default_question_set') : g.first.organisation_type_title 
+        = f.inputs :name => group_title, :class => "collapsible inputs" do
+          - g.group_by(&:organisation_id).each do |org, t|
+            %li.template_name= t.first.organisation_name
+            %ol
+              %li{class: "check_boxes input optional"}
+                %fieldset.choices
+                  = hidden_field_tag 'plan[template_ids][]', ''
+                  %ol.choices-group.template_list
+                    - t.each do |i|
+                      %li.choice
+                        %label{for: dom_id(i)}
+                          = check_box_tag 'plan[template_ids][]', i.id, @plan.template_ids.include?(i.id), id: dom_id(i), class: @plan.template_ids.include?(i.id) ? "warning" : nil, readonly: @plan.template_ids.include?(i.id)
+                          = i.name
+                        .description
+                          = sanitize i.description
+                          - unless i.url.blank? 
+                            .website= link_to t('dmp.further_details'), i.url
+
+    - else
+      %p.error= t('dmp.no_templates')
+
+  .plan_footer

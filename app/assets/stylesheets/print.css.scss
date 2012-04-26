@@ -1,0 +1,21 @@
+html {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 10pt;
+}
+
+#header, 
+#dcc_banner, 
+#login_overlay,
+.pagination,
+.jisc_logo {
+  display: none;
+}
+
+h2.post_title {
+  padding-top: 1em; 
+}
+
+.post_body {
+  padding-bottom: 2em;
+  border-bottom: solid 1px black;
+}

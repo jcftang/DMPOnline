@@ -1,0 +1,8 @@
+%dl.boilerplate
+  %dt= t('dmp.boilerplate_picklist')
+  %dd
+    %ul.boilerplate
+      - bps.each do |bp_content|
+        %li
+          .content= bp_content.force_encoding("UTF-8")
+          .insert

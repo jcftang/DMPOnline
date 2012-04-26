@@ -1,0 +1,6 @@
+%div{class: c}
+  %span.phase= phase
+  %span.edition= "[#{edition}]"
+  .progress
+    = phase_progress(qc, ac)
+    = render partial: 'progress_bar', locals: {qc: qc, ac: ac}

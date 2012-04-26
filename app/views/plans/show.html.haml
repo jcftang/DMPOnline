@@ -1,0 +1,129 @@
+- title @plan.project
+
+- if cannot?(:update, @plan)
+  .read_only= t('dmp.read_only')
+
+.plan_wrapper
+  .plan_left_column
+    .link_spacing.top
+      - if cannot? :update, @plan
+        %span.disabled_link= t('dmp.edit_project')
+      - elsif @plan.locked
+        %span.disabled_link= t('dmp.locked')
+      - else
+        = link_to t('dmp.edit_project'), edit_plan_path(@plan), class: 'edit_link'
+    .panel
+      %h3= t('dmp.project_details')
+      .panel_contents
+        .attributes_table
+          %table
+            %tbody
+              %tr
+                %th= t('attributes.project')
+                %td= plan_display(@plan, :project, nil, true)
+              %tr
+                %th= t('dmp.plan_created_at')
+                %td= plan_display(@plan, :created_at, :long, true)
+              %tr
+                %th= t('attributes.budget')
+                %td= plan_display(@plan, :budget, nil, true)
+              %tr
+                %th= t('attributes.start_date')
+                %td= plan_display(@plan, :start_date, :long, true)
+              %tr
+                %th= t('attributes.end_date')
+                %td= plan_display(@plan, :end_date, :long, true)
+              %tr
+                %th= t('attributes.lead_org')
+                %td= plan_display(@plan, :lead_org, nil, true)
+              %tr
+                %th= t('attributes.other_orgs')
+                %td= plan_display(@plan, :other_orgs, nil, true)
+  
+  .plan_right_column
+    .link_spacing.top
+      = link_to t('dmp.edit_project_access'), rights_plan_path(@plan), class: 'edit_link'
+    .panel
+      %h3= t('dmp.project_access')
+      .panel_contents
+        .attributes_table
+          - if @plan.user_list.blank?
+            = t('dmp.not_shared')
+          - else
+            %table
+              %thead
+                %tr
+                  %th= t('dmp.email')
+                  %th= t('dmp.access')
+              %tbody
+                - @plan.user_list.each do |u_email, u_rights|
+                  %tr
+                    %td
+                      = display_email_mask(u_email)
+                    %td
+                      = t("dmp.roles.#{u_rights}")
+            - if @plan.external_writable
+              .external-write= t('dmp.external_write')
+
+.link_spacing
+  = link_to t('dmp.my_plans'), plans_path, class: 'nav_link'
+  - if cannot?(:update, @plan)
+    %span.disabled_link= t('dmp.complete_plan')
+  - else
+    = link_to t('dmp.complete_plan'), complete_plan_path(@plan), class: "edit_link"
+  = link_to t('dmp.output'), output_plan_path(@plan), class: "nav_link"
+  %span.right
+    - unless @plan.locked 
+      - if cannot? :update, @plan
+        %span.disabled_link= t('dmp.admin.lock')
+      - else
+        = link_to t('dmp.admin.lock'), lock_plan_path(@plan), :confirm => t('dmp.lock_confirm'), :method => :put, :class => 'lock_link'
+    = link_to t('dmp.admin.duplicate'), duplicate_plan_path(@plan), :method => :post, :class => 'edit_link'
+    - if cannot? :update, @plan
+      %span.disabled_link= t('dmp.admin.delete')
+    - else
+      = link_to t('dmp.admin.delete'), @plan, :confirm => t('dmp.admin.delete_confirm'), :method => :delete, :class => 'delete_link'
+
+
+-# One query across all phases
+- question_count = @plan.question_counts
+- answered_count = @plan.answered_counts
+- multi_message = false
+
+.panel
+  %h3= t('dmp.project_phases')
+  .panel_contents
+    %dl.phases
+      - @plan.template_instances.for_user(current_user).each do |t|
+        %dt= "#{t.template.organisation.short_name} #{t.template.name}"
+        %dd
+          - if t.phase_edition_instances.empty?
+            %p.error= t('dmp.no_phases')
+          - else
+            %ol
+              - if t.phase_edition_instances.count > 1
+                - multi_message = true
+              - t.phase_edition_instances.each do |p|
+                - c = ''
+                - if answered_count[p.id] == question_count[p.id]
+                  - c = 'completed'
+                - elsif answered_count[p.id].to_i > 0 
+                  - c = 'started'
+                - else
+                  - c = 'new'
+                - if t.current_edition_id == p.edition_id
+                  - c += ' current'
+                - else
+                  - c += ' active'
+                %li
+                  -# HTML5 allows block elements within a tags
+                  - phase_block = render partial: 'phase_block', locals: {c: c, phase: p.edition.phase.phase, edition: p.edition.edition, qc: question_count[p.id], ac: answered_count[p.id]}
+                  - if cannot?(:update, @plan)
+                    = phase_block
+                  - else
+                    = link_to_if(t.current_edition_id == p.edition_id, phase_block, complete_plan_path(@plan, :tid => t.template_id)) do
+                      = link_to(phase_block, change_phase_plan_path(@plan, :edition_id => p.edition_id), method: :put)
+
+    - if multi_message
+      %p.phase_guide= t('dmp.change_phase')
+

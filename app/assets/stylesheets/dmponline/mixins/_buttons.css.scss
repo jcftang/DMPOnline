@@ -1,0 +1,82 @@
+@mixin default-button {
+  @include shadow;
+  @include gradient(lighten($primary-color, 15%), darken($primary-color, 12%));
+  @include rounded(200px);
+  @include text-shadow(#000);
+  text-decoration: none;
+  margin-right: 3px;
+  font-weight: bold;
+  font-size: 1.0em;
+  cursor: pointer;
+  padding: .6em 1.4em .5em 1.3em;
+  border: none;
+  color: #efefef;
+  &:hover { color: #fff; @include icon-color(#fff); @include shadow(0, 1px, 3px, #888) }
+  &:active { @include inset-shadow(0, 1px, 2px, #000); }
+}
+
+@mixin light-button {
+  @include default-button;
+  @include gradient(#f9f9f9, #dddbdb);
+  @include text-shadow;
+  color: #777;
+  &:hover { color: #444; @include icon-color(#444) }
+  &:active { @include inset-shadow; }
+}
+
+@mixin dark-button { @include default-button; }
+
+
+@mixin red-button {
+  @include default-button;
+  @include gradient(lighten($red, 15%), darken($red, 15%));
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($red, 25%));
+
+  &:hover { 
+    color: $offwhite; @include icon-color($offwhite);
+    @include gradient(darken($red, 5%), lighten($red, 5%));        
+  }
+
+  &:active { @include no-shadow; }
+
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+@mixin green-button {
+  @include default-button;
+  @include gradient(lighten($green, 5%), darken($green, 5%));
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($green, 12%));
+
+  &:hover { 
+    color: $offwhite; @include icon-color($offwhite);
+    @include gradient(darken($green, 5%), lighten($green, 5%));        
+  }
+
+  &:active { @include no-shadow; }
+
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+@mixin orange-button {
+  @include default-button;
+  @include gradient(lighten($orange, 5%), darken($orange, 5%));
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($orange, 15%));
+
+  &:hover { 
+    color: $offwhite; @include icon-color($offwhite);
+    @include gradient(darken($orange, 5%), lighten($orange, 5%));        
+  }
+
+  &:active { @include no-shadow; }
+
+  margin-right: 10px;
+  white-space: nowrap;
+}

@@ -1,0 +1,4 @@
+%li.nested-fields
+  = f.inputs do
+    = f.input :content, :label => false, :input_html => { rows: 4 }
+    = link_to_remove_association image_tag('minus.png', {:alt => "#{t('dmp.admin.remove_model', model: t('activerecord.models.boilerplate_text.one'))}"}), f

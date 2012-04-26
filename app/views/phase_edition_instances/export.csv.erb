@@ -1,0 +1,23 @@
+<%-
+  require 'csv'
+  csv_string = CSV.generate(:col_sep => ",", :row_sep => "\r\n") do |csv|
+    csv << [t('dmp.template_question'), t('dmp.dcc_equivalent'), t('dmp.response')]
+    qs = export_questions(@pei, @doc[:selection])
+    qs.each do |section|
+      unless section[:heading].blank?
+        csv << ["#{section[:number]}  #{section[:heading]}", "", ""]
+      end
+      section[:template_clauses].each do |q|
+        q[:answers].each do |a|
+          dcc = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]} " : ''
+          if @doc[:include_dcc_questions]
+            dcc += a[:dmp_clause]
+          end 
+          csv << ["#{q[:number]}  #{q[:question]}", dcc, a[:response]]
+        end
+      end
+    end
+  end
+
+-%>
+<%= raw csv_string %>

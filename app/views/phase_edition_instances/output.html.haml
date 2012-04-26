@@ -1,0 +1,106 @@
+- title t('dmp.output_plan', plan: @plan.project)
+
+.output
+  = form_for @phase_edition_instance, :url => export_plan_layer_path(@plan, @phase_edition_instance), :method => :get do |f|
+    = hidden_field_tag "doc[output_all]", @output_all ? "1" : ""
+    .constraint= @phase_edition_instance.template_instance.template.constraint_text
+    .panel
+      %h3= t('dmp.output_details')
+      .panel_contents
+        .attributes_table
+          %table
+            %tbody
+              %tr
+                %td= check_box_tag "doc[title]", 1, true
+                %th= t('attributes.project')
+                %td= plan_display(@plan, :project, nil, true)
+              %tr
+                %td= check_box_tag "doc[budget]", 1, true
+                %th= t('attributes.budget')
+                %td= plan_display(@plan, :budget, nil, true)
+              %tr
+                %td= check_box_tag "doc[project_dates]", 1, true
+                %th= t('dmp.project_dates')
+                %td
+                  = plan_display(@plan, :start_date, :long, true)
+                  %br
+                  = plan_display(@plan, :end_date, :long, true)
+              %tr
+                %td= check_box_tag "doc[template_org]", 1, true
+                %th= t('dmp.template_org')
+                %td
+                  = "#{@phase_edition_instance.template_instance.template.organisation.organisation_type.title}:"
+                  = @phase_edition_instance.template_instance.template.organisation.full_name
+              %tr
+                %td= check_box_tag "doc[partners]", 1, true
+                %th= t('dmp.partner_orgs')
+                %td 
+                  = plan_display(@plan, :lead_org, nil, true)
+                  - unless @plan.other_orgs.blank?
+                    %br
+                    = @plan.other_orgs
+              %tr
+                %td= check_box_tag "doc[project_status]", 1, true
+                %th= t('dmp.project_phase')
+                %td= @phase_edition_instance.edition.phase.phase
+  
+              %tr
+                %td= check_box_tag "doc[page_header]", 1, true
+                %th= t('dmp.page_header')
+                %td= text_field_tag "doc[page_header_text]", t('dmp.default_page_header')
+              %tr
+                %td= check_box_tag "doc[page_footer]", 1, true
+                %th= t('dmp.page_footer')
+                %td= text_field_tag "doc[page_footer_text]", t('dmp.default_page_footer', :date => l(Time.now(), format: :short))
+              %tr
+                %td= check_box_tag "doc[page_signatures]", 1, true
+                %th= t('dmp.signatures')
+                %td
+                  = text_field_tag "doc[page_signatures_count]", "3"
+                  .hint= t('dmp.signature_hint')
+              %tr
+                %td= check_box_tag "doc[dcc_question_numbers]", 1, true
+                %th= t('dmp.title_dcc_numbering')
+                %td= t('dmp.include_dcc_numbering')
+              %tr
+                %td= check_box_tag "doc[include_dcc_questions]", 1, true
+                %th= t('dmp.title_dcc_questions')
+                %td= t('dmp.include_dcc_questions')
+  
+    - unless @eqs.blank?
+      - number_questions(@eqs)
+      %fieldset#output_order.panel.collapsible
+        %legend
+          %span= t('dmp.reorder_questions')
+        #sortable
+          %ol
+            = render partial: 'output_sort', collection: @eqs, locals: {f: f}
+
+
+    .output-format
+      %label{for: "format"}
+        = t('dmp.output_format')
+        = select_tag 'format', '<option value="pdf">PDF</option><option value="html">HTML</option><option value="csv">CSV</option><option value="txt">TXT</option><option value="xml">XML</option><option value="xlsx">XLSX</option><option value="docx">DOCX</option><option value="rtf">RTF</option>'.html_safe
+    
+      .actions
+        = f.submit name: "doc[inline]", value: t('dmp.open')
+        = f.submit name: "doc[attachment]", value: t('dmp.download')
+
+    .constraint= @phase_edition_instance.template_instance.template.constraint_text
+
+    #page_layout.panel
+      %h3= t('dmp.page_layout')
+      .panel_contents
+        .attributes_table
+          %table
+            %tbody
+              %tr
+                %th= t('dmp.paper_orientation')
+                %td= select_tag 'doc[orientation]', "<option value='portrait'>#{t('dmp.portrait')}</option><option value='landscape'>#{t('dmp.landscape')}</option>".html_safe
+              %tr
+                %th= t('dmp.font_size')
+                %td= text_field_tag 'doc[font_size]', "10"
+              %tr
+                %th= t('dmp.font_style')
+                %td= select_tag 'doc[font_style]', "<option value='sans-serif'>#{t('dmp.sans_serif')}</option><option value='serif'>#{t('dmp.serif')}</option>".html_safe
+  

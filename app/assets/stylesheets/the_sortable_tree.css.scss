@@ -1,0 +1,50 @@
+.nested_set {
+  padding: 0;
+  ol {
+    margin: 0 0 0 25px;
+    border-left: 1px dashed gray;
+  }
+  li {
+    margin-bottom: 5px;
+    list-style-type: none;
+  }
+  a {
+  }
+  .root a {
+    font-weight: bold;
+  }
+  .handle {
+    cursor: move;
+  }
+  .link {
+    position: relative;
+    overflow: hidden;
+    zoom: 1;
+    padding: 5px;
+    margin: 0 0 5px 5px;
+    background: #EFEFEF;
+    @include rounded(5px);
+    &:hover {
+      background: #efe;
+    }
+  }
+  .controls {
+    position: absolute;
+    top: 5px; 
+    right: 10px;
+  }
+  .button {
+  }
+  .handle {
+  }
+  .placeholder {
+    background-color: lighten($green, 40%);
+    border: 1px dashed $green;
+  }
+  .ui-nestedSortable-error {
+    background: #FAA;
+    color: #8a1f11;
+  }
+
+}
+

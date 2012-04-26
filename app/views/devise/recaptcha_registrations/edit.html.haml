@@ -1,0 +1,29 @@
+- title t('dmp.auth.edit_user')
+- error_notices devise_error_messages!
+  
+= semantic_form_for :user, :url => registration_path(:user), :html => { :method => :put } do |f|
+
+  -# See user model
+  -#= f.inputs name: t('dmp.auth.change_email') do
+  -#  = f.input :email
+  -#  = f.input :email_confirmation, label: t('dmp.auth.confirm_email'), input_html: { value: (params[:email_confirmation] || @user.email) } 
+  
+  = f.inputs name: t('dmp.auth.change_pass') do
+    = f.input :password, label: t('dmp.auth.new_pass'), hint: t('dmp.auth.blank_password')
+    = f.input :password_confirmation, :label => t('dmp.auth.confirm_pass')
+
+  = render :partial => 'profile', locals: {f: f}
+
+  = f.inputs do
+    = f.input :current_password, label: t('dmp.auth.current_pass'), hint: t('dmp.auth.current_password_hint')
+
+    = f.buttons class: 'buttons indent' do
+      = f.commit_button t('dmp.auth.update_user')
+
+.cancel_account
+  %h3= t('dmp.auth.del_reg') 
+  
+  %p= t('dmp.auth.unhappy')
+  %p= link_to t('dmp.auth.del_reg'), registration_path(:user), :confirm => t('dmp.auth.sure'), :method => :delete
+
+.cancel_link= link_to t('dmp.go_back'), root_path(), class: "nav_link"

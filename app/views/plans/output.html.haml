@@ -1,0 +1,44 @@
+- title t('dmp.output_plan', plan: @plan.project)
+
+-# One query across all phases
+- question_count = @plan.question_counts
+- answered_count = @plan.answered_counts
+- ref_p = nil
+
+.panel
+  %h3= t('dmp.output_template')
+  .panel_contents
+    %dl.phases
+      - @plan.template_instances.for_user(current_user).each do |t|
+        %dt= "#{t.template.organisation.short_name} #{t.template.name}"
+        %dd
+          - if t.phase_edition_instances.empty?
+            %p.error= t('dmp.no_phases')
+          - else
+            %ol
+              - t.phase_edition_instances.each do |p|
+                - c = ''
+                - if answered_count[p.id] == question_count[p.id]
+                  - c = 'completed'
+                - elsif answered_count[p.id].to_i > 0 
+                  - c = 'started'
+                - else
+                  - c = 'new'
+                - if t.current_edition_id == p.edition_id
+                  - c += ' current'
+                  - ref_p = p
+                - else
+                  - c += ' active'
+                %li
+                  -# HTML5 allows block elements within a tags
+                  - phase_block = render partial: 'phase_block', locals: {c: c, phase: p.edition.phase.phase, edition: p.edition.edition, qc: question_count[p.id], ac: answered_count[p.id]}
+                  = link_to phase_block, output_plan_layer_path(@plan, p)
+      - if @plan.template_instances.for_user(current_user).count > 1 && !ref_p.nil?
+        %dt= t('dmp.combined_output')
+        %dd
+          %ol
+            %li
+              - phase_block = render partial: 'phase_block', locals: {c: 'new active', phase: t('dmp.all_questions'), edition: t('dmp.across_all_templates'), qc: nil, ac: nil}
+              = link_to phase_block, output_all_plan_layer_path(@plan, ref_p)
+
+    %p= t('dmp.pick_output_template')

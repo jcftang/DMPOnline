@@ -1,0 +1,6 @@
+- title t('dmp.news')
+
+.static_body
+  = render :partial => "post", :locals => {post: @post}
+
+%p= link_to t('dmp.go_back'), url_for(:back), class: "view_link"

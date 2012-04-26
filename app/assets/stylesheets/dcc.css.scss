@@ -1,0 +1,16 @@
+/* 
+ * DCC Branding.  We ask that this styling is not amended by organisation's
+ * stylesheet customisation.
+ */
+#dcc_banner {
+  background: transparent url(header_bg.png) repeat left bottom !important;
+  border-bottom: solid black 1px;
+  height: 25px !important;
+  margin: 0 0 !important;
+  padding: 5px 30px 0 5px !important;
+  display: block !important;
+ 
+  img.dcc_logo {
+    float: left;
+  }
+}

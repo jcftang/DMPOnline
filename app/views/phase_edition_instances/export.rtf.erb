@@ -1,0 +1,207 @@
+<%-
+docStyle = RTF::DocumentStyle.new
+docStyle.top_margin = 567
+docStyle.right_margin = 567
+docStyle.bottom_margin = 567
+docStyle.left_margin = 567
+
+if @doc[:orientation] == 'portrait'
+  docStyle.orientation = RTF::DocumentStyle::PORTRAIT
+  tableWidth = 10770
+else
+  docStyle.orientation = RTF::DocumentStyle::LANDSCAPE
+  tableWidth = 15700 
+end
+
+if @doc[:font_style] == 'serif' 
+  document = RTF::Document.new(RTF::Font.new(RTF::Font::ROMAN, 'Times New Roman'), docStyle)
+else
+  document = RTF::Document.new(RTF::Font.new(RTF::Font::SWISS, 'Arial'), docStyle)
+end
+
+
+header = RTF::HeaderNode.new(document, RTF::HeaderNode::UNIVERSAL)
+header << @doc[:page_header_text]
+document.header=(header)
+
+footer = RTF::FooterNode.new(document, RTF::FooterNode::UNIVERSAL)
+footer << @doc[:page_footer_text]
+document.footer=(footer)
+
+styles = {}
+styles['Content'] = RTF::ParagraphStyle.new
+styles['Content'].left_indent = 0
+
+styles['HeaderBlock'] = RTF::ParagraphStyle.new
+styles['HeaderBlock'].left_indent = 200
+
+styles['Heading'] = RTF::CharacterStyle.new
+styles['Heading'].bold = true
+styles['Heading'].font_size = (@doc[:font_size] * 2 * 1.5).to_i
+
+styles['SectionHeading'] = RTF::CharacterStyle.new
+styles['SectionHeading'].bold = true
+styles['SectionHeading'].font_size = (@doc[:font_size] * 2 * 1.5).to_i
+styles['SectionHeading'].foreground = RTF::Colour.new(255, 255, 255)
+styles['SectionHeading'].background = RTF::Colour.new(1, 1, 1)
+
+styles['SignatureBlock'] = RTF::ParagraphStyle.new
+styles['SignatureBlock'].left_indent = 0
+
+styles['Signatures'] = RTF::CharacterStyle.new
+styles['Signatures'].bold = true
+styles['Signatures'].font_size = @doc[:font_size] * 2
+
+styles['Question'] = RTF::CharacterStyle.new
+styles['Question'].bold = false
+styles['Question'].font_size = @doc[:font_size] * 2
+
+styles['Answer'] = RTF::CharacterStyle.new
+styles['Answer'].bold = false
+styles['Answer'].font_size = @doc[:font_size] * 2
+
+styles['Running'] = RTF::CharacterStyle.new
+styles['Running'].bold = false
+styles['Running'].font_size = (@doc[:font_size] * 2 * 0.75).to_i
+
+styles['DMPHeading'] = RTF::CharacterStyle.new
+styles['DMPHeading'].bold = true
+styles['DMPHeading'].font_size = (@doc[:font_size] * 2 * 1.5).to_i
+
+
+headerTable = document.table(1, 2, (tableWidth * 0.40).to_i, (tableWidth * 0.60).to_i)
+headerTable.border_width = 0
+
+asset = Rails.application.assets.find_asset('dmp_logo.png')
+logo = headerTable[0][0].image(asset.pathname.to_s)
+logo.x_scaling = 50
+logo.y_scaling = 50
+
+headerTable[0][1].apply(styles['DMPHeading']) << plan_display(@plan, :project)
+if @doc[:project_status]
+  headerTable[0][1].line_break
+  headerTable[0][1].apply(styles['Answer']) << t('dmp.project_stage', phase: @phase_edition_instance.edition.phase.phase)
+end
+if @doc[:template_org]
+  headerTable[0][1].line_break
+  headerTable[0][1].apply(styles['Answer']) << "#{@phase_edition_instance.template_instance.template.organisation.organisation_type.title}: #{@phase_edition_instance.template_instance.template.organisation.full_name}"
+end
+if @doc[:partners]
+  headerTable[0][1].line_break
+  headerTable[0][1].apply(styles['Answer']) << t('dmp.lead_org', org: plan_display(@plan, :lead_org))
+  unless @plan.other_orgs.blank?
+    headerTable[0][1].line_break
+    headerTable[0][1].apply(styles['Answer']) << t('dmp.other_orgs', orgs: plan_display(@plan, :other_orgs))
+  end
+end
+if @doc[:project_dates]
+  headerTable[0][1].line_break
+  headerTable[0][1].apply(styles['Answer']) << "#{t('dmp.project_dates')}: #{plan_display(@plan, :start_date)} #{t('dmp.range_to')} #{plan_display(@plan, :end_date)}"
+end
+if @doc[:budget]
+  headerTable[0][1].line_break
+  headerTable[0][1].apply(styles['Answer']) << "#{t('attributes.budget')}: #{plan_display(@plan, :budget)}"
+end
+
+document.paragraph 
+
+cols = 3
+rows = []
+row = {}
+
+qs = export_questions(@pei, @doc[:selection])
+qs.each do |section|
+  row[:style] = 'SectionHeading'
+  row[0] = section[:number]
+  row[1] = section[:heading]
+  rows << row
+  row = {}
+
+  section[:template_clauses].each do |q|
+    row[0] = q[:number]
+    if q[:is_heading]
+      row[:style] = 'Heading'
+    else
+      row[:style] = 'Question'
+      row[1] = q[:question]
+      unless q[:is_mapped]
+        q[:answers].each do |a|
+          row[2] = a[:response]
+        end
+      end
+    end
+    rows << row
+    row = {}
+
+    if q[:is_mapped]
+      q[:answers].each do |a|
+        row[:style] = 'Answer'
+        row[0] = ''
+        row[1] = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]} " : ''
+        if @doc[:include_dcc_questions]
+          row[1] += strip_tags(a[:dmp_clause])
+        end 
+        row[2] = a[:response]
+        rows << row
+        row = {}
+      end
+    end
+  end
+end
+  
+grid = document.table(rows.size, 3, (tableWidth * 0.08).to_i, (tableWidth * 0.32).to_i, (tableWidth * 0.6).to_i)
+grid.border_width = 0
+
+0.upto(rows.size - 1).each do |i|
+  row = rows[i]
+
+  grid[i][0].apply(styles[row[:style]]) << row[0]
+  grid[i][1].apply(styles[row[:style]]) << row[1]
+  if row[2].blank?
+    grid[i][1].width = (tableWidth * 0.92).to_i
+    grid[i][2].width = 0
+  else
+    paragraphs = row[2].split(/(\n\s*){2,}/).delete_if{|x| x !~ /\S/}
+    paragraphs.each do |p|
+      lines = p.split(/\n/).delete_if{|x| x !~ /\S/}
+      lines.each do |l|
+        grid[i][2].apply(styles['Answer']) << l
+        grid[i][2].line_break unless l == lines.last
+      end       
+      grid[i][2].line_break unless p == paragraphs.last
+      grid[i][2].line_break unless p == paragraphs.last
+    end
+  end
+end
+
+document.paragraph(styles['SignatureBlock']) do |n1| 
+  n1.line_break
+  n1.line_break
+end
+
+
+footerTable = document.table(@doc[:page_signatures_count], 2, (tableWidth * 0.5).to_i, (tableWidth * 0.5).to_i)
+footerTable.border_width = 0
+
+row = 0
+@doc[:page_signatures_count].times do 
+  footerTable[row][0].apply(styles['Signatures']) do |n2|
+    n2 << "Signature  ____________________________________"
+    n2.line_break
+    n2.line_break
+    n2 << "Print name ____________________________________"
+    n2.line_break
+    n2.line_break
+  end
+  footerTable[row][1].apply(styles['Signatures']) do |n2|
+    n2 << "Date  ___________________________________"
+    n2.line_break
+    n2.line_break
+    n2 << "Role/institution  _________________________"
+    n2.line_break
+    n2.line_break
+  end
+  row += 1
+end
+-%>
+<%= raw document.to_rtf %>

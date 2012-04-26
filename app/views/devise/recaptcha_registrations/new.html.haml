@@ -1,0 +1,20 @@
+- title t('dmp.auth.sign_up')
+- error_notices devise_error_messages!
+  
+= semantic_form_for :user, :url => registration_path(:user) do |f|
+
+  = f.inputs do
+    = f.input :email
+    = f.input :email_confirmation, :label => t('dmp.auth.confirm_email')
+    = f.input :password
+    = f.input :password_confirmation
+
+  = render :partial => 'profile', locals: {f: f}
+
+  - if Rails.application.config.recaptcha_enabled
+    = recaptcha_tags
+    
+  = f.buttons do
+    = f.commit_button t('dmp.auth.sign_up')
+
+= render :partial => "devise/shared/links"

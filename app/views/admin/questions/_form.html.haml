@@ -1,0 +1,82 @@
+- if @question.errors.any?
+  - render partial: "/layouts/errormessages", locals: {errors: @question.errors}
+
+- @question.build_guide if @question.guide.nil?
+- @question.boilerplate_texts.build if @question.boilerplate_texts.nil?
+
+= semantic_form_for [:admin, @question] do |f|
+  = f.inputs t('dmp.admin.details') do
+    = f.input :edition_id, :as => :hidden
+    - kind_options = translated_types
+    - if !@question.mappings.blank?
+      - kind_options = mapped_kind_option
+    = f.input :kind, :as => :select, :collection => kind_options
+    = f.input :number_style, :as => :select, :collection => translated_styles
+    = f.input :question, :input_html => { :class => 'wysiwyg' }
+    = f.input :default_value, :rows => 3, :hint => t('dmp.admin.token_hint', :tokens => Answer::TOKENS.join('], ['))
+
+    - d1 = dependency_question_options(@question)
+    - d2 = dependency_dcc_question_options(@question)
+    - dependency_opts = {}
+    - unless d1.blank?
+      - dependency_opts["-- #{t('dmp.admin.template_questions')}"] = ''
+      - dependency_opts.merge!(d1)
+    - unless d2.blank?
+      - dependency_opts["-- #{t('dmp.admin.dcc_questions')}"] = ''
+      - dependency_opts.merge!(d2)
+    - if d1.blank? && d2.blank?
+      = f.input :dependency_question_id, :as => :hidden, input_html: {:value => ''}
+      = f.input :dependency_value, :as => :hidden, input_html: {:value => ''}
+    - else
+      = f.input :dependency_question_id, :as => :select, :collection => dependency_opts 
+      = f.input :dependency_value, :hint => t('dmp.admin.pipe_separated')
+
+    = f.semantic_fields_for :guide  do |g|
+      = g.input :guidance, :input_html => { :class => 'wysiwyg' }
+
+  #boilerplate_collapsible
+    - if @question.is_text?
+      = f.inputs t('activerecord.models.boilerplate_text.other'), :class => 'inputs cocoon' do
+        = f.semantic_fields_for :boilerplate_texts do |bp|
+          = render 'boilerplate_text_fields', :f => bp
+        .links
+          = link_to_add_association image_tag('plus.png', {:alt => "#{t('dmp.admin.add_model', model: t('activerecord.models.boilerplate_text.one'))}"}), f, :boilerplate_texts
+
+  #mapping_collapsible
+    - dcc_list = dcc_checklist_pick(@question.edition)
+    - used_questions = dcc_checklist_taken_edition(@question)
+    - selected_questions = @question.dcc_question_ids
+    - unless dcc_list.blank?
+      = f.inputs t('dmp.admin.select_mappings'), class: "inputs#{@question.new_record? ? '' : ' collapsible'}" do
+        %li{class: "check_boxes input optional"}
+          %fieldset.choices
+            %legend.label
+              %label= t('attributes.select_dcc_questions')
+            = hidden_field_tag 'question[select_dcc_questions][]', ''
+            %ol.choices-group
+              - dcc_list.each do |label, q|
+                - id = "question_select_dcc_questions_#{q}"
+                - disabled = used_questions.include?(q)                 
+                %li.choice
+                  %label{for: id}
+                    = check_box_tag 'question[select_dcc_questions][]', q, selected_questions.include?(q), disabled: disabled, id: id
+                    - if disabled
+                      %span.strike
+                        = label
+                      %span.used
+                        = " (#{used_questions[q]})"
+                    - else
+                      = label
+
+      = hidden_field_tag 'dcc_taken', used_questions
+      = hidden_field_tag 'dcc_selected', selected_questions
+
+      - unless @question.mappings.blank?
+        - dcc_numbers = dcc_numbering(@question.edition)
+        = f.inputs t('activerecord.models.mapping.other'), :id => 'sortable' do
+          = f.semantic_fields_for :mappings do |mapping|
+            = render 'mapping_fields', :f => mapping, :dcc_numbers => dcc_numbers
+
+  = f.buttons do
+    %li.button= link_to t('dmp.go_back'), edit_admin_edition_path(@question.edition), class: 'cancel_link'
+    = f.commit_button

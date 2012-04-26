@@ -1,0 +1,65 @@
+# encoding: utf-8
+DMP Online (Digital Curation Centre)
+- if @doc[:page_header]
+  = "#{@doc[:page_header_text]}:"
+
+= ""
+= plan_display(@plan, :project)
+= '=' * @plan.project.length
+= ""
+- if @doc[:project_status]
+  = t('dmp.project_stage', phase: @phase_edition_instance.edition.phase.phase)
+- if @doc[:template_org]
+  = "#{@phase_edition_instance.template_instance.template.organisation.organisation_type.title}: #{@phase_edition_instance.template_instance.template.organisation.full_name}"
+- if @doc[:partners]
+  = t('dmp.lead_org', org: plan_display(@plan, :lead_org))
+  - unless @plan.other_orgs.blank?
+    = t('dmp.other_orgs', orgs: plan_display(@plan, :other_orgs))
+- if @doc[:project_dates]
+  = "#{t('dmp.project_dates')}: #{plan_display(@plan, :start_date)} #{t('dmp.range_to')} #{plan_display(@plan, :end_date)}"
+- if @doc[:budget]
+  = "#{t('attributes.budget')}: #{plan_display(@plan, :budget)}"
+
+= '-' * @plan.project.length
+= ""
+
+- qs = export_questions(@pei, @doc[:selection])
+- qs.each do |section|
+  - unless section[:heading].blank?
+    - t = word_wrap(section[:heading], :line_width => @doc[:width] - 4).gsub("\n", "\n    ")
+    - i = (section[:number].length <= 2) ? ' ' * (2 - section[:number].length) : ''
+    = "#{i}#{section[:number]}  #{t}"
+
+  - section[:template_clauses].each do |q|
+    - t = word_wrap(q[:question], :line_width => @doc[:width] - 4).gsub("\n", "\n    ")
+    - i = (q[:number].length <= 2) ? ' ' * (2 - q[:number].length) : ''
+    = "#{i}#{q[:number]}  #{t}"
+
+    - if q[:is_mapped]
+      - q[:answers].each do |a|
+        - dcc_number = @doc[:dcc_question_numbers] ? a[:dmp_number].slice(4..-1) : ''
+        - dcc_clause = @doc[:include_dcc_questions] ? strip_tags(a[:dmp_clause]) : ''
+        - t = word_wrap(dcc_clause, :line_width => @doc[:width] - 11).gsub("\n", "\n" + ' ' * 11)
+        - i = (dcc_number.length <= 9) ? ' ' * (9 - dcc_number.length) : ''
+        = "#{i}#{dcc_number}  #{t}"
+        - i = ' ' * 10 + '|'
+        - t = word_wrap(a[:response], :line_width => @doc[:width] - 11).gsub("\n", "\n" + i)
+        = "#{i}#{t}"
+        = ""
+    - else
+      - q[:answers].each do |a|
+        - i = ' ' * 10 + '|'
+        - t = word_wrap(a[:response], :line_width => @doc[:width] - 11).gsub("\n", "\n" + i)
+        = "#{i}#{t}"
+        = ""
+
+
+- @doc[:page_signatures_count].times do
+  = ""
+  = ""
+  = ""
+  = ""
+  Signature  ______________________________________________  Date ______________  
+  = ""
+  = ""
+  Print name ___________________________  Role/institution _____________________  

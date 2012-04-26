@@ -1,0 +1,8 @@
+= semantic_form_for [:admin, @post] do |f|
+  = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :title
+    = f.input :body, :input_html => { :class => 'wysiwyg' }
+    = f.input :locale, :as => :select, :collection => supported_locales
+    = f.input :organisation, :label => :organisation_id, :collection => current_user.org_list, :input_html => { :disabled => !@post.new_record? }, :required => true
+
+  = f.buttons

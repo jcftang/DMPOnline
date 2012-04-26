@@ -1,0 +1,29 @@
+- if @mapping.errors.any?
+  - render(partial: "/layouts/errormessages", locals: {errors: @mapping.errors})
+
+- @mapping.build_guide if @mapping.guide.nil?
+- @mapping.boilerplate_texts.build
+
+.mapping_questions
+  .template_question= sanitize @mapping.question.question
+  .dcc_question
+    - dcc_numbers = dcc_numbering(@mapping.question.edition)
+    DCC
+    = dcc_numbers[@mapping.dcc_question_id]
+    &nbsp;
+    = sanitize @mapping.dcc_question.question
+
+= semantic_form_for [:admin, @mapping] do |f|
+  = f.inputs I18n.t('dmp.admin.mapping_text') do
+    = f.semantic_fields_for :guide  do |g|
+      = g.input :guidance, :input_html => { :class => 'wysiwyg' }
+
+  = f.inputs t('activerecord.models.boilerplate_text.other'), :class => 'inputs cocoon' do
+    = f.semantic_fields_for :boilerplate_texts do |bp|
+      = render 'boilerplate_text_fields', :f => bp
+    .links
+      = link_to_add_association image_tag('plus.png', {:alt => "#{t('dmp.admin.add_model', model: t('activerecord.models.boilerplate_text.one'))}"}), f, :boilerplate_texts
+
+  = f.buttons do
+    %li.button= link_to t('dmp.go_back'), url_for(:back), class: 'cancel_link'
+    = f.commit_button

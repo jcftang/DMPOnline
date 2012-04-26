@@ -1,0 +1,10 @@
+%h3= t('dmp.news')
+.panel_contents
+  - if !news.empty?
+    - news.each do |post|
+      %ul.news
+        %li
+          .title= link_to post.try(:title), post
+          .small= t('dmp.posted_ago', :period => time_ago_in_words(post.created_at))
+  - else
+    %p= t('dmp.no_news')

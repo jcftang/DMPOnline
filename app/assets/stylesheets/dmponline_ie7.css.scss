@@ -1,0 +1,66 @@
+// CSS Styles fixes for IE7
+
+ul#tabs {
+  li {
+    display: inline-block;
+    float: left;
+  }
+}
+
+ul.template-reference-list li {
+  float: left;
+  width: 97%;
+}
+
+.drag-button {
+  behavior: none;
+  -pie-background: none;
+  &:hover {
+    -pie-background: none;
+    behavior: none;
+  }
+}
+form.user fieldset.inputs,
+.nested-fields fieldset,
+.panel {
+  border: solid 1px #c0c0c0;
+  background: transparent;
+  behavior: none;
+}
+.accordion {
+  .panel {
+    height: 10%;
+    .dialogue {
+      display: none;
+    }
+  }
+}
+fieldset.collapsible,
+table.index_table td.actions,
+table.checklist td.action {
+  background: transparent !important;
+  li {
+    position: relative;
+  }
+}
+
+.pagination {
+  font-size: 12px;
+}
+
+.output-format label {
+  vertical-align: middle;
+  display: inline;
+  select {
+    left: 50%;
+  }
+}
+
+li.input {
+  label { 
+    margin-right: 10px;
+  }
+  select {
+    margin-bottom: 4px;
+  }
+}

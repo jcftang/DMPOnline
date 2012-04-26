@@ -1,0 +1,42 @@
+= f.semantic_fields_for :answers, answer do |a|
+  - dcc_q = a.object.dcc_question
+  - if dcc_q.nil?
+    - dependency = q.dependency
+    - q_kind = q.kind
+    - q_id = q.id
+    - q_dependency_value = q.dependency_value
+    - q_number = q.number_display
+  - else
+    - dependency = Question.find(dcc_q.id).dependency
+    - q_kind = dcc_q.kind
+    - q_id = dcc_q.id
+    - q_dependency_value = dcc_q.dependency_value
+    - q_number = "DCC #{dcc_q_numbering[dcc_q.id]}"
+
+
+  - d = "tr#answer_row_#{dependency.try(:id)} .input-area #{dependency.try(:form_source)}"
+  %tr{id: "answer_row_#{q_id}", data: {dependency: d, being: q_dependency_value}}
+    %td.question-area
+      - if dcc_q.nil?
+        = t('dmp.no_dcc_equivalent')
+        -# Not allowing these to be hidden since there is no way of reinstating them!
+      - else
+        %div.dcc_number= q_number
+        %div.dcc_question
+          = sanitize dcc_q.question
+          .hide_opt
+            = a.inputs do
+              = a.input :hidden, :input_html => { class: "monitor" }
+              
+    %td.input-area
+      = a.inputs do
+        - case q_kind
+          - when 'b'
+            = a.input :answer, :as => :radio, :collection => {t('dmp.boolean_yes') => '1', t('dmp.boolean_no') => '0'}, :label => false, :input_html => {class: 'monitor'}
+          - when 't'
+            = a.input :answer, :as => :text, :input_html => {class: 'wysiwyg_opt monitor'}, :label => false, :rows => 3
+          - when 'u'
+            = a.input :answer, :as => :url, :label => false, :input_html => {class: 'monitor'}
+      = boilerplate_list(a.object)
+    %td.guidance-area
+      = template_reference_list(a.object, q_number)

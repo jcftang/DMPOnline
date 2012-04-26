@@ -1,0 +1,14 @@
+#utility_nav
+  - if user_signed_in?
+    %span.current_user
+      = link_to current_user.email, edit_user_registration_path(:user)
+    |
+    - if current_user.is_admin?
+      = link_to t('dmp.admin.title'), admin_dashboard_path
+      |
+    = link_to t('dmp.auth.sign_out'), destroy_user_session_path 
+  - else 
+    = link_to t('dmp.auth.register'), new_user_registration_path
+    - if controller_name != 'sessions' 
+      |
+      = link_to t('dmp.auth.sign_in'), new_user_session_path, :rel => '#login_overlay'

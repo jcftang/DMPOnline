@@ -1,0 +1,123 @@
+// Active Admin CSS Styles fixes for IE9
+@import "active_admin/mixins";
+//@import "active_admin/base";
+
+// To customize the Active Admin interfaces, add your
+// styles here:
+
+$red: #ff0000;
+$green: #19cd01; 
+$orange: #fe9900;
+$grey: #898989;
+$offwhite: #fdfbfa;
+$offblack: #3f3e3e;
+
+#title_bar {
+  .action_items {
+    // Fix for IE9 - can't have rounded corners and graduated background on same entity
+    a {
+      @include no-gradient;
+      background: lighten($green, 5%) url(large-green-grad.gif) 0px 0px repeat-x;
+      @include icon-color($offwhite);
+      color: $offwhite;
+      @include text-shadow(darken($green, 12%));
+
+      &:hover { 
+        @include no-gradient;        
+        color: $offwhite; @include icon-color($offwhite);
+        background: darken($green, 5%) url(large-green-grad.gif) 0px -48px repeat-x;
+      }
+      &:active { @include no-shadow; }
+    }
+
+    a[data-method=delete] {
+      @include no-gradient;
+      background: lighten($red, 15%) url(large-red-grad.gif) 0px 0px repeat-x;
+      @include icon-color($offwhite);
+      color: $offwhite;
+      @include text-shadow(darken($red, 25%));
+
+      &:hover { 
+        @include no-gradient;        
+        color: $offwhite; @include icon-color($offwhite);
+        background: darken($red, 15%) url(large-red-grad.gif) 0px -48px repeat-x;
+      }
+      &:active { @include no-shadow; }
+    }
+  }
+}
+
+form {
+  input[type="submit"] {
+    @include no-gradient;
+    background: lighten($green, 5%) url(small-green-grad.gif) 0px 0px repeat-x;
+    @include icon-color($offwhite);
+    color: $offwhite;
+    @include text-shadow(darken($green, 12%));
+    
+    &:hover {
+      @include no-gradient;        
+      color: $offwhite; @include icon-color($offwhite);
+      background: darken($green, 5%) url(small-green-grad.gif) 0px -34px repeat-x;
+    }
+  }
+  
+  fieldset.buttons li.cancel a {
+    @include no-gradient;
+    background: lighten($red, 15%) url(small-red-grad.gif) 0px 0px repeat-x;
+    @include icon-color($offwhite);
+    color: $offwhite;
+    @include text-shadow(darken($red, 25%));
+
+    &:hover { 
+      @include no-gradient;        
+      color: $offwhite; @include icon-color($offwhite);
+      background: darken($red, 15%) url(small-red-grad.gif) 0px -34px repeat-x;
+    }
+    &:active { @include no-shadow; }
+  }
+}
+
+
+a.view_link, a.edit_link, a.create_link {
+  @include no-gradient;
+  background: lighten($green, 5%) url(small-green-grad.gif) 0px 0px repeat-x;
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($green, 12%));
+
+  &:hover { 
+    @include no-gradient;        
+    color: $offwhite; @include icon-color($offwhite);
+    background: darken($green, 5%) url(small-green-grad.gif) 0px -34px repeat-x;
+  }
+  &:active { @include no-shadow; }
+}
+a.delete_link, a.cancel_link {
+  @include no-gradient;
+  background: lighten($red, 15%) url(small-red-grad.gif) 0px 0px repeat-x;
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($red, 25%));
+
+  &:hover { 
+    @include no-gradient;        
+    color: $offwhite; @include icon-color($offwhite);
+    background: darken($red, 15%) url(small-red-grad.gif) 0px -34px repeat-x;
+  }
+  &:active { @include no-shadow; }
+}
+a.special_link {
+  @include no-gradient;
+  background: lighten($orange, 5%) url(small-orange-grad.gif) 0px 0px repeat-x;
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($orange, 12%));
+
+  &:hover { 
+    @include no-gradient;
+    color: $offwhite; @include icon-color($offwhite);
+    background: darken($orange, 5%) url(small-orange-grad.gif) 0px -34px repeat-x;
+  }
+  &:active { @include no-shadow; }
+}

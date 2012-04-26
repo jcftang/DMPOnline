@@ -1,0 +1,9 @@
+%h2.post_title= post.title
+%div{:class => "small post_title"}
+  -#= t('dmp.posted_by', :user => post.author.try(:email), :period => time_ago_in_words(post.created_at))
+  = t('dmp.posted_ago', :period => time_ago_in_words(post.created_at))
+
+- if current_user.try(:is_admin?)
+  %p= link_to(t('dmp.admin.edit_this'), edit_admin_post_path(post), class: "edit_link")
+
+.post_body= sanitize post.body

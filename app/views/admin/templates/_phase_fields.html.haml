@@ -1,0 +1,7 @@
+%li.nested-fields
+  = f.inputs do
+    .drag-button{:title => t('dmp.admin.drag')}
+      = image_tag("white/vertical.png", {:class => "handle"})
+    = f.input :phase
+    = f.input :position, wrapper_html: {:class => "sort-position"}, :hint => t('dmp.admin.sort_hint')
+    = link_to_remove_association image_tag('minus.png', {:alt => "#{t('dmp.admin.remove_model', model: t('activerecord.models.phase.one'))}"}), f

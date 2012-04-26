@@ -1,0 +1,4 @@
+%p= t('dmp.errors', :count => errors.count)
+%ul
+  - errors.full_messages.each do |msg|
+    %li= msg

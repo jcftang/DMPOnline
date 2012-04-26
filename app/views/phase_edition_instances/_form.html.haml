@@ -1,0 +1,9 @@
+= semantic_form_for @phase_edition_instance, :url => plan_layer_path(@plan, @phase_edition_instance), :method => :put do |f|
+  = f.inputs do
+    %p= "HOLDING PAGE.  THIS FUNCTIONALITY IS NOT CURRENTLY IMPLEMENTED!"
+    = f.input :sword_edit_uri, as: :url
+
+  .plan_footer
+    = f.buttons do
+      = f.commit_button t('dmp.update_url')
+      %li.button= link_to t('dmp.cancel'), url_for(:back), {class: "cancel_link"}

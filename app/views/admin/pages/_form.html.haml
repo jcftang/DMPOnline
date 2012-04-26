@@ -1,0 +1,12 @@
+= semantic_form_for [:admin, @page] do |f|
+  = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :title, :hint => t('dmp.admin.pages_title_hint')
+    = f.input :body, :input_html => { :class => 'wysiwyg' }, :hint => t('dmp.admin.pages_body_hint')
+    = f.input :slug, :hint => t('dmp.admin.pages_slug_hint')
+    = f.input :menu, :as => :select, :collection => menu_options, :default => 0
+    = f.input :position, :as => :select, :collection => (-10..10), :hint => t('dmp.admin.pages_position_hint')
+    = f.input :target_url, :hint => t('dmp.admin.pages_url_hint')
+    = f.input :organisation, :label => :organisation_id, :hint => t('dmp.admin.pages_organisation_hint'), :collection => current_user.org_list, :input_html => { :disabled => !@page.new_record? }, :required => true
+    = f.input :locale, :as => :select, :collection => supported_locales
+
+  = f.buttons

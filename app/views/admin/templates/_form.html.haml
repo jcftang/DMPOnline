@@ -1,0 +1,23 @@
+- if @template.errors.any?
+  - render(partial: "/layouts/errormessages", locals: {errors: @template.errors})
+
+- @template.phases.build if @template.phases.nil?
+
+= semantic_form_for [:admin, @template] do |f|
+  = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :name
+    = f.input :organisation, :label => :organisation_id
+    = f.input :description, :input_html => { :class => 'wysiwyg' }
+    = f.input :url  
+
+  = f.inputs I18n.t('activerecord.models.phase.other'), :id => "sortable" do |template|
+    = f.semantic_fields_for :phases do |phase|
+      = render 'phase_fields', :f => phase
+    .links
+      = link_to_add_association image_tag('plus.png', {:alt => "#{t('dmp.admin.add_model', model: t('activerecord.models.phase.one'))}"}), f, :phases
+
+  = f.inputs t('dmp.admin.constraints') do
+    = f.input :constraint_text
+    -#= f.input :constraint_limit
+      
+  = f.buttons

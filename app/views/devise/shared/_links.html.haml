@@ -1,0 +1,11 @@
+- if controller_name != 'recaptcha_registrations'
+  .session= link_to t('dmp.auth.register'), new_registration_path(:user), class: 'nav_link'
+
+- if controller_name != 'passwords'
+  .session= link_to t('dmp.auth.forgot_pass'), new_password_path(:user)
+
+- if controller_name != 'confirmations'
+  .session= link_to t('dmp.auth.no_confirmation'), new_confirmation_path(:user)
+
+-# resource_class.omniauth_providers.each do |provider| 
+  -#.session.omniauth= link_to "#{t('dmp.auth.sign_in_with')} #{provider.to_s.titleize}", omniauth_authorize_path(:user, provider) 

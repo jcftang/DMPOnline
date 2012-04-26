@@ -1,0 +1,14 @@
+- title t('dmp.auth.sign_up')
+- error_notices devise_error_messages!
+  
+= semantic_form_for :user, :url => registration_path(:user) do |f|
+
+  = f.inputs do
+    = f.input :email
+    = f.input :password
+    = f.input :password_confirmation
+
+  = f.buttons do
+    = f.commit_button t('dmp.auth.sign_up')
+
+= render :partial => "devise/shared/links"

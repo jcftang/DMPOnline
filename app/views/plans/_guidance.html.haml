@@ -1,0 +1,6 @@
+- ref = dom_id(g)
+%div{id: ref, class: "guidance #{popup ? 'popup' : ''}"}
+  = link_to image_tag('i.png', alt: t('dmp.guidance_available')), "#anchor-#{ref}", class: 'guidance-button', data: {guide: ref}
+  .dialogue{:id => "dialogue-#{ref}", title: "#{t('dmp.org_guidance', org_name: org_name)} (#{q_number})"}
+    %a{:name => "#anchor-#{ref}"}
+    = sanitize g.guidance.force_encoding("UTF-8")

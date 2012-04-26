@@ -1,0 +1,13 @@
+= semantic_form_for [:admin, @edition] do |f|
+  = f.inputs I18n.t('dmp.admin.details') do
+    = f.input :edition
+
+    - unless @edition.phase.template.checklist
+      = f.input :dcc_edition, as: :select, collection: dcc_checklist_editions, required: true
+
+  = sortable_tree @edition.questions.nested_set.all, klass: :question, rebuild_url: rebuild_admin_questions_path, path: 'admin/questions/the_sortable_tree', :max_levels => 3
+
+
+  = f.buttons do
+    %li.button= link_to t('dmp.go_back'), url_for(:back), class: 'cancel_link'
+    = f.commit_button

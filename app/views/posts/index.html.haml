@@ -1,0 +1,11 @@
+- title t('dmp.news')
+
+.static_body
+
+  - unless @posts.empty?
+    .posts
+      = render :partial => "post", :collection => @posts
+      .pagination= paginate @posts
+  
+  - else
+    %p= t('dmp.no_news')

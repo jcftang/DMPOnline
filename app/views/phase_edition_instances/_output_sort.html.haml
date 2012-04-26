@@ -1,0 +1,21 @@
+%li.nested-fields
+  %fieldset.inputs.output
+    %ol.question
+      .drag-button{:title => t('dmp.admin.drag')}
+        = image_tag("white/vertical.png", {:class => "handle"})
+
+      %li
+        - id = "q_#{output_sort.id}"
+        %label.question_label{for: id}
+          = check_box_tag 'doc[selection][]', output_sort.id, true, id: id
+          .item
+            = output_sort.number_display
+            &nbsp;
+            = strip_tags output_sort.question
+      
+      %li.sort-position
+        - id = "p_#{output_sort.id}"
+        = number_field_tag "doc[position][#{output_sort.id}]", '', id: id
+        %label{for: id} 
+          = t('dmp.admin.sort_hint')
+

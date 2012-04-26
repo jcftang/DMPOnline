@@ -1,0 +1,13 @@
+= f.inputs name: t('dmp.auth.tell_us') do
+  - selected_cats = @user.categories
+  %li{id: 'user_categories_input', class: 'check_boxes input required'}
+    %fieldset.choices
+      %legend.label
+        %label= t('attributes.categories')
+      = hidden_field_tag 'user[categories][]', ''
+      %ol.choices-group
+        - translated_categories.each do |l, c|
+          %li.choice
+            %label{for: "user_category_#{c}"}
+              = check_box_tag 'user[categories][]', c, selected_cats.include?(c), id: "user_category_#{c}"
+              = l

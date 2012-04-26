@@ -1,0 +1,84 @@
+<%
+workbook = RubyXL::Workbook.new
+ws = workbook.worksheets[0]
+
+ws.add_cell(0, 0, @doc[:page_header_text])
+
+ws.add_cell(2, 0, plan_display(@plan, :project))
+r=3
+
+
+if @doc[:project_status]
+  ws.add_cell(r, 1, t('dmp.project_stage', phase: @phase_edition_instance.edition.phase.phase))
+  r += 1
+end
+if @doc[:template_org]
+  ws.add_cell(r, 1, "#{@phase_edition_instance.template_instance.template.organisation.organisation_type.title}: #{@phase_edition_instance.template_instance.template.organisation.full_name}")
+  r += 1
+end
+if @doc[:partners]
+  ws.add_cell(r, 1, t('dmp.lead_org', org: plan_display(@plan, :lead_org)))
+  r += 1
+  unless @plan.other_orgs.blank?
+    ws.add_cell(r, 1, t('dmp.other_orgs', orgs: plan_display(@plan, :other_orgs)))
+    r += 1
+  end
+end
+if @doc[:project_dates]
+  ws.add_cell(r, 1, "#{t('dmp.project_dates')}: #{plan_display(@plan, :start_date)} #{t('dmp.range_to')} #{plan_display(@plan, :end_date)}")
+  r += 1
+end
+if @doc[:budget]
+  ws.add_cell(r, 1, "#{t('attributes.budget')}: #{plan_display(@plan, :budget)}")
+  r += 1
+end
+
+r += 1
+
+qs = export_questions(@pei, @doc[:selection])
+qs.each do |section|
+  ws.add_cell(r, 0, section[:number])
+  ws.add_cell(r, 1, section[:heading])
+  r += 1
+
+  section[:template_clauses].each do |q|
+    ws.add_cell(r, 0, q[:number])
+    if !q[:is_heading]
+      ws.add_cell(r, 1, strip_tags(q[:question]))
+      unless q[:is_mapped]
+        q[:answers].each do |a|
+          ws.add_cell(r, 2, a[:response])
+        end
+      end
+    end
+    r += 1
+
+    if q[:is_mapped]
+      q[:answers].each do |a|
+        dcc_clause = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]} " : ''
+        if @doc[:include_dcc_questions]
+          dcc_clause += strip_tags(a[:dmp_clause])
+        end 
+        ws.add_cell(r, 1, dcc_clause)
+        ws.add_cell(r, 2, a[:response])
+        r += 1
+      end
+    end
+  end
+end
+
+r += 2
+
+@doc[:page_signatures_count].times do 
+  ws.add_cell(r, 1, "Signature  ____________________________________")
+  ws.add_cell(r, 3, "Date  ___________________________________")
+  r += 3
+  ws.add_cell(r, 1, "Print name ____________________________________")
+  ws.add_cell(r, 3 ,"Role/institution  _________________________")
+  r += 3
+end
+
+ws.add_cell(r, 0, @doc[:page_footer_text])
+
+workbook.write(@doc[:tmpfile])
+%>

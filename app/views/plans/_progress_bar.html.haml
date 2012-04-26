@@ -1,0 +1,7 @@
+- unless qc.blank? || qc == 0
+  - if ac.blank? || ac == 0 
+    - pc = 0
+  - else
+    - pc = (100.0 * ac / qc).floor
+  .progress_bar
+    .progress{style: "width: #{pc}%"}

@@ -1,0 +1,32 @@
+.index_as_table
+  %table.index_table.plans
+    %tr
+      =sortable_header :project
+      =sortable_header :start_date
+      =sortable_header :lead_org
+      %th{colspan: 2}
+  
+    - if @plans.blank?
+      %tr
+        %td= t('dmp.no_plans') 
+        %td
+        %td
+        %td
+        %td
+        
+    - @plans.each do |plan|
+      %tr{:class => "#{cycle('odd', 'even')} #{plan.locked ? 'locked' : 'open'}"}
+        %td
+          = plan_display(plan, :project, nil, true)
+          - if plan.locked
+            %span.status= "#{t('dmp.locked')}"
+          - if plan.user_id != current_user.id
+            %span.plan-owner= plan_created_by(plan)
+        %td= plan_display(plan, :start_date, :short, true)
+        %td= plan_display(plan, :lead_org, nil, true)
+        %td.actions= link_to t('dmp.admin.view'), plan, :class => 'view_link'
+        %td.actions= link_to t('dmp.output'), output_plan_path(plan), :class => 'edit_link'
+
+  .pagination= paginate @plans
+
+= link_to t('dmp.new_plan'), new_plan_path, :class => 'create_link'

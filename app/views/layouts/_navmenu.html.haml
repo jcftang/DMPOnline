@@ -1,0 +1,5 @@
+%ul{:class=> "tabbed-navigation header-item", :id => "tabs"}
+  - Page.menu('navigation').each do |page|
+    %li
+      = link_to_unless_current(page.title, slug_link(page)) do
+        = link_to(page.title, slug_link(page), :class => 'current')

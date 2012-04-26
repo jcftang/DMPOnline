@@ -1,0 +1,24 @@
+.top
+  - if ti.template.organisation.logo.file?
+    .description
+      = image_tag ti.template.organisation.logo.url(:template), alt: ti.template.organisation.full_name, class: 'org-logo'
+
+    - unless ti.template.description.blank?
+      = sanitize ti.template.description
+      - unless ti.template.url.blank?
+        .website= link_to t('dmp.further_details'), ti.template.url
+    
+  - qs = number_questions(ti.current_edition.sorted_sections)
+  - section_id = params[:sid].to_i
+  - section_id = qs.first.id unless qs.collect{ |q| q.id }.include?(section_id)
+  .sections
+    %ol
+      - qs.each do |q|
+        - if q.id == section_id
+          %li{class: 'current ui-tabs-selected'}
+            = link_to content_tag(:span, "#{t('dmp.template_section', n: q.number_display)}"), complete_plan_path(@plan, :tid => ti.template_id, :sid => q.id), :title => t('dmp.selected_section')
+        - else
+          %li= link_to content_tag(:span, "#{t('dmp.template_section', n: q.number_display)}"), complete_plan_path(@plan, :tid => ti.template_id, :sid => q.id)
+    %div{id: t('dmp.selected_section').tr(' ', '_')}
+      = render partial: "section", locals: {section_id: section_id, ti: ti}, layout: false
+    

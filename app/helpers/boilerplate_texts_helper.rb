@@ -1,0 +1,2 @@
+module BoilerplateTextsHelper
+end

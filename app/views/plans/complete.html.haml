@@ -1,0 +1,22 @@
+- title @plan.project
+
+#templates.accordion{data: {preloader: "#{ajax_preloader}"}}
+  - template_list = @plan.template_instances.joins(:template => :organisation).order('organisations.full_name, templates.name')
+  - tid = params[:tid].to_i
+  - tid = template_list.first.template_id unless tid > 0
+  .panel
+    - template_list.each do |ti|
+      - section_title = "#{ti.template.organisation.short_name} #{ti.template.name} (#{ti.current_edition.phase.phase})"
+      - if ti.template_id == tid
+        %h3.current
+          = link_to section_title, complete_plan_path(@plan, :tid => ti.template_id)
+        .panel-contents
+          = render partial: 'template', locals: {ti: ti}, layout: false
+      - else
+        %h3
+          = link_to section_title, complete_plan_path(@plan, :tid => ti.template_id)
+        .panel-contents
+
+
+= link_to t('dmp.finished'), plan_path(@plan), :class => "nav_link"
+

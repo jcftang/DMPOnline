@@ -1,0 +1,482 @@
+// Active Admin CSS Styles
+@import "active_admin/mixins";
+@import "active_admin/base";
+@import "dmponline/mixins/variables";
+@import "the_sortable_tree";
+@import "dcc";
+@import "jquery_ui";
+
+// To customize the Active Admin interfaces, add your
+// styles here:
+
+#wrapper {
+  min-width: 980px;
+}
+
+#header { 
+  @include gradient(#fffffe, #f7f7f7);
+  border-bottom: 1px solid $green;
+  height: auto;
+  position: relative;
+  padding: 17px 30px 15px 30px;
+  
+  img { 
+    padding-right: 40px; 
+    vertical-align: bottom;
+  }
+
+  @include text-shadow(#d8d8d8);
+  a, a:link { color: $orange; }
+  
+  .header-item {
+    float: none;
+    top: 2px;
+  }
+   
+  ul#tabs {
+    font-weight: bold;
+    vertical-align: bottom;
+    
+    & > li { 
+      padding-top: 0.7em;
+      a {
+        padding: 4px 9px;
+      }
+      
+      &.current > a {
+        background: $orange;
+        color: $offwhite;
+        @include text-shadow(darken($orange, 12%));
+      }
+  
+      &.has_nested.current > a { 
+        background-color: $orange; 
+        color: $offwhite;
+        @include text-shadow(darken($orange, 12%));
+      }
+  
+      &:hover > a { 
+        background: $orange;
+        color: $offwhite;
+        @include text-shadow(darken($orange, 12%));
+      }
+  
+      &.has_nested:hover > a { 
+        border-bottom: 5px solid $orange;
+        background-color: $orange;
+        color: $offwhite;
+        @include text-shadow(darken($orange, 12%));
+      }
+    }
+  }
+
+  #utility_nav { 
+    color: $grey;
+    a, a:link { color: $green; }
+    a:hover { color: $orange; }
+    position: absolute;
+    right: 30px;
+    top: 10px;
+  }
+
+}
+
+#title_bar {
+  .action_items {
+    a {
+      @include gradient(lighten($green, 5%), darken($green, 5%));
+      @include icon-color($offwhite);
+      color: $offwhite;
+      @include text-shadow(darken($green, 12%));
+
+      &:hover { 
+        color: $offwhite; 
+        @include icon-color($offwhite);
+        @include gradient(darken($green, 5%), lighten($green, 5%));        
+      }
+      &:active {
+        color: $offwhite; 
+        @include icon-color($offwhite);
+        @include no-shadow; 
+        @include gradient($green, lighten($green, 10%));              
+      }
+    }
+    
+    a[data-method=delete] {
+      @include gradient(lighten($red, 15%), darken($red, 15%));
+      @include icon-color($offwhite);
+      color: $offwhite;
+      @include text-shadow(darken($red, 25%));
+
+      &:hover { 
+        color: $offwhite; 
+        @include icon-color($offwhite);
+        @include gradient(darken($red, 5%), lighten($red, 5%));        
+      }
+      &:active {
+        color: $white; 
+        @include icon-color($white);
+        @include no-shadow; 
+        @include gradient($red, lighten($red, 10%));        
+    }
+    }
+    
+  }
+}
+
+
+form {
+  input[type=submit] {
+    @include gradient(lighten($green, 5%), darken($green, 5%));        
+    @include icon-color($offwhite);
+    color: $offwhite;
+    @include text-shadow(darken($green, 12%));
+    border: none;
+  
+    &:hover { 
+      color: $offwhite; 
+      @include icon-color($offwhite);
+      @include gradient(darken($green, 5%), lighten($green, 5%));        
+    }
+    
+    &:active {
+      color: $white; 
+      @include icon-color($white);
+      @include no-shadow; 
+      @include gradient($green, lighten($green, 10%));        
+    }
+    
+    padding: 5px 16px 4px;
+  }
+
+  fieldset.buttons li.cancel a {
+    @include gradient(lighten($red, 15%), darken($red, 15%));        
+    @include icon-color($offwhite);
+    color: $offwhite;
+    @include text-shadow(darken($red, 25%));
+  
+    &:hover { 
+      color: $offwhite; 
+      @include icon-color($offwhite);
+      @include gradient(darken($red, 15%), lighten($red, 15%));        
+    }
+  }
+  
+  fieldset ol > li label abbr {
+    color: $red;
+  }
+
+  select {
+    border: 1px solid #c9d0d6;
+    @include rounded;
+    font-size: 0.95em;
+    font-family: Helvetica, Arial, sans-serif;
+    outline: none;
+    padding: 4px 0 3px $text-input-horizontal-padding;
+    
+    &:focus {
+      border: 1px solid #99a2aa;
+      @include shadow(0,0,4px,#99a2aa);
+    }  
+  }
+  
+  li.hidden {
+    display: none;
+  }
+
+}
+
+.icon-button {
+  @include default-button;
+  @include gradient(lighten($green, 5%), darken($green, 5%));
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($green, 12%));
+  border: none;
+
+  &:hover { 
+    color: $offwhite; 
+    @include icon-color($offwhite);
+    @include gradient(lighten($orange, 5%), darken($orange, 5%));
+  }
+  &:active {
+    color: $white; 
+    @include icon-color($white);
+    @include no-shadow; 
+    @include gradient($green, lighten($green, 10%));        
+  }
+  
+  display: inline-block;
+  float: left;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  margin-right: 10px;
+  white-space: nowrap;
+  line-height: 3em;
+}
+
+a.view_link, a.edit_link, a.create_link {
+  @include default-button;
+  @include gradient(lighten($green, 5%), darken($green, 5%));        
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($green, 12%));
+  border: none;
+
+  &:hover { 
+    color: $offwhite; 
+    @include icon-color($offwhite);
+    @include gradient(darken($green, 5%), lighten($green, 5%));        
+  }
+
+  &:active { 
+    color: $white; 
+    @include icon-color($white);
+    @include no-shadow; 
+    @include gradient($green, lighten($green, 10%));          
+  }
+
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+a.delete_link, a.cancel_link {
+  @include default-button;
+  @include gradient(lighten($red, 15%), darken($red, 15%));
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($red, 25%));
+  border: none;
+
+  &:hover { 
+    color: $offwhite; @include icon-color($offwhite);
+    @include gradient(darken($red, 5%), lighten($red, 5%));        
+  }
+  &:active {
+    color: $white; 
+    @include icon-color($white);
+    @include no-shadow; 
+    @include gradient($red, lighten($red, 10%));        
+  }
+
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+a.special_link {
+  @include default-button;
+  @include gradient(lighten($orange, 5%), darken($orange, 5%));
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($orange, 12%));
+  border: none;
+
+  &:hover { 
+    color: $offwhite; @include icon-color($offwhite);
+    @include gradient(darken($orange, 5%), lighten($orange, 5%));        
+  }
+  &:active {
+    color: $white; 
+    @include icon-color($white);
+    @include no-shadow; 
+    @include gradient($orange, lighten($orange, 10%));
+  }
+
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+.disabled_link {
+  @include light-button;
+  @include icon-color($grey);
+  color: $grey;
+  &:link, &:visited {
+    text-decoration: none;
+    color: $grey;
+  }
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
+ol.ui-sortable, fieldset.cocoon > ol {
+  img.handle {
+    float: left;
+  }
+  li.nested-fields {
+    ol {
+      padding: 8px 8px 2px 4px;
+      vertical-align: baseline;
+      width: 100%;
+      li {
+        width: 90%;
+        float: left;
+        label {
+          position: relative;
+          left: 60px;
+          width: 15%;
+        }
+        input {
+          position: absolute;
+          left: 20%;
+          width: 70%;
+        }
+        textarea {
+          position: relative;
+          left: 22%;
+          width: 75%;
+          margin-bottom: 5px;
+        }
+      }
+    }
+    a.remove_fields {
+      float: right;
+      padding-right: 20px;
+    }
+  }
+  .links a {
+    padding-left: 12px;
+  }
+  .link > a {
+    display: inline-block;
+    float: left;
+    position: absolute;
+    left: 45px;
+    right: 15em;
+  }
+}
+
+.drag-button {
+  @include default-button;
+  @include gradient(lighten($green, 5%), darken($green, 5%));        
+  @include icon-color($offwhite);
+  color: $offwhite;
+  @include text-shadow(darken($green, 12%));
+  border: none;
+
+  &:hover { 
+    color: $white; 
+    @include icon-color($white);
+    @include no-shadow; 
+    @include gradient(darken($orange, 5%), lighten($orange, 5%));          
+  }
+
+  padding: 6px 6px;
+  margin: 0 0;
+  white-space: nowrap;
+  display: inline-block;
+  clear: none;
+  float: left;
+}
+
+
+thead th {
+  background: none repeat scroll 0 0 lighten($green, 50%);
+}
+
+tbody tr.even {
+  td {
+    background-color: $evenrow;
+  }
+}
+td > a.member_link {
+  margin-top: 2px;
+  margin-bottom: 4px;
+}
+
+.panel_contents table td .empty {
+  color: #BBBBBB;
+  font-size: 0.8em;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.mceEditor table.mceLayout {
+  width: 400px;
+}
+
+span.checklist {
+  color: $orange;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 200%;
+  padding-left: 20px;
+  vertical-align: middle;
+}
+
+.index_content {
+  h2 {
+    line-height: 110%;
+  }
+  .template {
+    border-top: solid 1px $grey;
+    padding: 10px 0;
+  }
+}
+
+.nested_set .link .value {
+  display: block;
+  font-weight: bold;
+  left: 30px;
+  margin: 0 15em 0 40px;
+  vertical-align: bottom;
+}
+
+.mapping_questions {
+  font-size: 150%;
+  border: 2px solid $orange;
+  padding: 1em 1em 0 1em;
+  margin-bottom: 1em;
+  .template_question {
+  p {
+    margin-bottom: 0.5em;
+  }
+  }
+  .dcc_question {
+    padding: 12px 0 12px 48px;
+    background: url(arrow_right.png) no-repeat left 6px;
+    font-weight: bold;
+  }
+}
+textarea#question_default_value {
+  height: 60px;
+}
+
+input[type=submit].mapping_text {
+  float: right;
+  margin-right: 20px;
+}
+#sortable .question_label {
+  margin: 0 25em 0 50px;
+}
+
+fieldset.collapsible {
+  legend {
+    cursor: pointer;
+    span {
+      vertical-align: top;
+      &.ui-icon {
+        padding: 0 0;
+        margin: 0 1em 0 0;
+        display: inline-block;
+      }
+    }
+  }
+}
+label {
+  .strike {
+    text-decoration: line-through;
+    font-weight: normal;
+  }
+  .used {
+    color: $orange;
+  }
+}
+.extras_status {
+  float: right;
+  padding-top: 4px;
+  span {
+    margin-right: 10px;
+  }
+}
+td > p:last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,77 @@
+html {
+  font-family: Helvetica,Arial,sans-serif;
+  font-size: 12pt;
+}
+
+#header, 
+#dcc_banner, 
+#login_overlay,
+.pagination,
+.jisc_logo {
+  display: none;
+}
+
+table {
+  width: 100%;
+  border: 0 none;
+  border-bottom: 2px solid #ccc;
+  border-collapse: collapse;
+  h3 {
+    margin: 0 0 0.5em 0;
+  }
+  tr {
+    &.type-h {
+      font-weight: bold;
+      background: #ccc;
+    }
+    &.depth-0.type-h {
+      background: #000;
+      font-weight: bold;
+      font-size: 110%;
+      color: #fff;
+    }
+    &.odd {
+      background: #eee;
+    }
+    &.even {
+      background: #ddd;
+    }
+    &.spacer {
+      height: 0.5em; 
+    }
+    td {
+      padding: 0.3em 0.7em;
+      vertical-align: top;
+      background: none transparent;
+      &.logo {
+        width: 30%;
+        vertical-align: bottom;
+        img {
+          border: 0
+        }
+      }
+      &.number {
+        width: 1%;
+        font-weight: bold;
+      }
+      &.dcc_number {
+        width: 5%;
+        white-space: nowrap;
+      }
+      &.question-heading {
+        font-weight: bold;
+      }
+      &.question {
+        font-weight: bold;
+        width: 30%;
+      }
+      p {
+        padding: 0 0 0.5em 0;
+        margin: 0 0;
+        &:last-child {
+          padding: 0 0;
+        }
+      }
+    }
+  }
+}
