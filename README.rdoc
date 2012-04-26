@@ -17,7 +17,7 @@ The tool has three main functions
 
 == Bugs & Feature Requests
 
-* Bug Reports & Feature Requests: https://github.com/DigitalCurationCentre/dmponline3/issues
+* Bug Reports & Feature Requests: https://github.com/DigitalCurationCentre/DMPOnline/issues
 
 == Getting Started
 
@@ -52,10 +52,10 @@ user@example.com:: A normal end user
 The password for each of these is 'password'
 
 == Tools Being Used
-DMPOnline is built using a number of other open source projects
+DMPOnline is built using a number of other open source projects, including
 
 Active Admin::
-  A framework fir creating administration-style interfaces.
+  A framework for creating administration-style interfaces.
 Formtastic::
   A DSL for semantically building forms.
 Devise::
@@ -68,4 +68,4 @@ Iconic Icons::
 
 == Copyright
 
-Copyright (c) 2012 Digital Curation Centre, University of Edinburgh. See LICENSE for details.
+Copyright (c) 2012 Digital Curation Centre, University of Edinburgh. See AGPL-LICENSE for details.
