@@ -19,7 +19,7 @@ group :assets do
   gem 'coffee-rails', "~> 3.1.0"
   gem 'uglifier'
 end
-gem 'sass-rails',   "~> 3.1.0"
+gem 'sass-rails', "3.1.4"
 
 gem 'jquery-rails', "1.0.19"
 gem "rails3-jquery-autocomplete", "1.0.6"
