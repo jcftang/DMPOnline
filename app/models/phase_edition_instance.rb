@@ -36,7 +36,7 @@ class PhaseEditionInstance < ActiveRecord::Base
           pvi.answers.create!(:question_id => q.id, :dcc_question_id => m.dcc_question_id, :answer => d.try(:answer))        
         end
       else
-        pvi.answers.create!(:question_id => q.id)
+        pvi.answers.create!(:question_id => q.id) unless q.is_heading?
       end
     end
        
