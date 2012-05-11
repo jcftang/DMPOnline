@@ -58,7 +58,8 @@ class Edition < ActiveRecord::Base
   end
 
   def section_questions(qid)
-    self.questions.where('parent_id IS NULL OR parent_id = ?', qid).nested_set
+    q = Question.find(qid)
+    self.questions.where('parent_id IS NULL OR (lft >= ? AND rgt <= ?)', q.lft, q.rgt).nested_set
   end
   
   def sorted_questions
