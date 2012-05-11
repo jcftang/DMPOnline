@@ -26,12 +26,12 @@ DMP Online (Digital Curation Centre)
 - qs = export_questions(@pei, @doc[:selection])
 - qs.each do |section|
   - unless section[:heading].blank?
-    - t = word_wrap(section[:heading], :line_width => @doc[:width] - 4).gsub("\n", "\n    ")
+    - t = word_wrap(strip_tags(section[:heading]), :line_width => @doc[:width] - 4).gsub("\n", "\n    ")
     - i = (section[:number].length <= 2) ? ' ' * (2 - section[:number].length) : ''
     = "#{i}#{section[:number]}  #{t}"
 
   - section[:template_clauses].each do |q|
-    - t = word_wrap(q[:question], :line_width => @doc[:width] - 4).gsub("\n", "\n    ")
+    - t = word_wrap(strip_tags(q[:question]), :line_width => @doc[:width] - 4).gsub("\n", "\n    ")
     - i = (q[:number].length <= 2) ? ' ' * (2 - q[:number].length) : ''
     = "#{i}#{q[:number]}  #{t}"
 

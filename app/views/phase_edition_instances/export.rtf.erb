@@ -37,13 +37,11 @@ styles['HeaderBlock'].left_indent = 200
 
 styles['Heading'] = RTF::CharacterStyle.new
 styles['Heading'].bold = true
-styles['Heading'].font_size = (@doc[:font_size] * 2 * 1.5).to_i
+styles['Heading'].font_size = (@doc[:font_size] * 2 * 1.3).to_i
 
 styles['SectionHeading'] = RTF::CharacterStyle.new
 styles['SectionHeading'].bold = true
-styles['SectionHeading'].font_size = (@doc[:font_size] * 2 * 1.5).to_i
-styles['SectionHeading'].foreground = RTF::Colour.new(255, 255, 255)
-styles['SectionHeading'].background = RTF::Colour.new(1, 1, 1)
+styles['SectionHeading'].font_size = (@doc[:font_size] * 2 * 1.3).to_i
 
 styles['SignatureBlock'] = RTF::ParagraphStyle.new
 styles['SignatureBlock'].left_indent = 0
@@ -113,7 +111,7 @@ qs = export_questions(@pei, @doc[:selection])
 qs.each do |section|
   row[:style] = 'SectionHeading'
   row[0] = section[:number]
-  row[1] = section[:heading]
+  row[1] = strip_tags(section[:heading])
   rows << row
   row = {}
 
@@ -123,7 +121,7 @@ qs.each do |section|
       row[:style] = 'Heading'
     else
       row[:style] = 'Question'
-      row[1] = q[:question]
+      row[1] = strip_tags(q[:question])
       unless q[:is_mapped]
         q[:answers].each do |a|
           row[2] = a[:response]

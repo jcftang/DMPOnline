@@ -5,15 +5,15 @@
     qs = export_questions(@pei, @doc[:selection])
     qs.each do |section|
       unless section[:heading].blank?
-        csv << ["#{section[:number]}  #{section[:heading]}", "", ""]
+        csv << ["#{section[:number]}  #{strip_tags(section[:heading])}", "", ""]
       end
       section[:template_clauses].each do |q|
         q[:answers].each do |a|
           dcc = @doc[:dcc_question_numbers] ? "#{a[:dmp_number]} " : ''
           if @doc[:include_dcc_questions]
-            dcc += a[:dmp_clause]
+            dcc += strip_tags(a[:dmp_clause])
           end 
-          csv << ["#{q[:number]}  #{q[:question]}", dcc, a[:response]]
+          csv << ["#{q[:number]}  #{strip_tags(q[:question])}", dcc, a[:response]]
         end
       end
     end
