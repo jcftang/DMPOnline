@@ -115,6 +115,13 @@ jQuery ->
       $(this).prev().find("input[type=hidden]").val("1")
       $(this).closest("form").setDirty()
       $(this).closest("tr").slideUp()
+      
+  $("form.phase_edition_instance a.create_link").livequery ->
+    $(this).click ->
+      if $("form.phase_edition_instance").isDirty() && !confirm 'You have unsaved changes.  Are you sure you want to navigate away?'
+        return false
+      $("form.phase_edition_instance").cleanDirty()
+  
 
   guidance_blocks()
   # guidance_hovers()

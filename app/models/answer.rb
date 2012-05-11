@@ -90,7 +90,7 @@ class Answer < ActiveRecord::Base
             .first
       if d.try(:answered)
         self.answer = d.answer
-        self.anwered = d.answered
+        self.answered = d.answered
       end
     end
   end
