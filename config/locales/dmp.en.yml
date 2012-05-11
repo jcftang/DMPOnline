@@ -26,7 +26,7 @@ en:
     plan_created: "Plan was successfully created."
     plan_updated: "Plan was successfully updated."
     update_failed: "Update failed"
-    update_plan: "Save plan"
+    update_plan: "Save Responses"
     plan_create_step_1: "1. Enter your project details:"
     plan_create_step_2: "2. Select plan templates from the groupings below:"
     copy_stamp: "COPY"
