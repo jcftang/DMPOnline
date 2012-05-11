@@ -72,8 +72,8 @@
               - else
                 %td.question{colspan: "#{4-q[:depth]}"}= q[:question]
                 %td.answer
-                - q[:answers].each do |a|
-                  .answer= simple_format(a[:response])
+                  - q[:answers].each do |a|
+                    .answer= simple_format(a[:response])
     
             - if q[:is_mapped]
               - q[:answers].each do |a|
