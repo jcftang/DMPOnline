@@ -3,7 +3,8 @@
 .output
   = form_for @phase_edition_instance, :url => export_plan_layer_path(@plan, @phase_edition_instance), :method => :get do |f|
     = hidden_field_tag "doc[output_all]", @output_all ? "1" : ""
-    .constraint= @phase_edition_instance.template_instance.template.constraint_text
+    - unless @phase_edition_instance.template_instance.template.constraint_text.blank?
+      .constraint= @phase_edition_instance.template_instance.template.constraint_text
     .panel
       %h3= t('dmp.output_details')
       .panel_contents
@@ -86,7 +87,8 @@
         = f.submit name: "doc[inline]", value: t('dmp.open')
         = f.submit name: "doc[attachment]", value: t('dmp.download')
 
-    .constraint= @phase_edition_instance.template_instance.template.constraint_text
+    - unless @phase_edition_instance.template_instance.template.constraint_text.blank?
+      .constraint= @phase_edition_instance.template_instance.template.constraint_text
 
     #page_layout.panel
       %h3= t('dmp.page_layout')

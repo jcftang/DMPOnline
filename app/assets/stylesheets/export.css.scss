@@ -24,7 +24,8 @@ table {
       font-weight: bold;
       background: #ccc;
     }
-    &.depth-0.type-h {
+    &.depth-0.type-h,
+    &.depth-0.type-m {
       background: #000;
       font-weight: bold;
       font-size: 110%;

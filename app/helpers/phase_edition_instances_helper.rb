@@ -18,7 +18,7 @@ module PhaseEditionInstancesHelper
     if pei.is_a?(Plan)
       dcc_q_numbering = dcc_numbering(pei.template_instances.first.current_edition) 
     else
-      dcc_q_numbering = dcc_numbering(pei.template_instance.current_edition)
+      dcc_q_numbering = dcc_numbering(pei.edition)
     end
     
     first = true

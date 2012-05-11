@@ -131,14 +131,14 @@ class PhaseEditionInstancesController < ApplicationController
     @doc[:filename] = "#{@plan.project.parameterize}.#{params[:format]}"
     @doc[:format] = params[:format]
     
-    unless @doc[:inline].nil?
+    unless @doc[:inline].blank?
       response.headers['Content-Disposition'] = 'inline; filename=' + @doc[:filename]
     else
       response.headers['Content-Disposition'] = 'attachment; filename=' + @doc[:filename]
     end
     
-    if @doc[:output_all]
-      @pei = @phase_edition_instance.template_instance.plan
+    unless @doc[:output_all].blank?
+      @pei = @plan
     else
       @pei = @phase_edition_instance
     end
