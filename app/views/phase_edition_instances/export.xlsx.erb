@@ -48,10 +48,10 @@ qs.each do |section|
       unless q[:is_mapped]
         q[:answers].each do |a|
           ws.add_cell(r, 2, a[:response])
+          r += 1
         end
       end
     end
-    r += 1
 
     if q[:is_mapped]
       q[:answers].each do |a|
