@@ -37,7 +37,7 @@ gem "libxslt-ruby", "1.0.8"
 gem "rubyzip", "0.9.6.1"
 gem "rtf", "0.3.3"
 gem "romans", "0.1.0"
-gem "wicked_pdf", "0.7.5"
+gem "wicked_pdf", "0.7.7"
 gem "rubyXL", "1.2.5"
 
 # Use unicorn as the web server
