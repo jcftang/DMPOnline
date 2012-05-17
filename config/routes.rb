@@ -35,7 +35,8 @@ Dmponline3::Application.routes.draw do
         post 'add_answer/:question_id', :question_id => /\d+/, :action => 'add_answer', :as => 'add_answer'
         get 'output'
         get 'output_all'
-        get 'export'
+        # Changed to POST - IE apparently not happy with long URLs and plugins
+        post 'export'
       end
     end
 

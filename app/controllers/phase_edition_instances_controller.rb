@@ -82,6 +82,8 @@ class PhaseEditionInstancesController < ApplicationController
     render :output
   end
 
+  # Changed to POST - IE apparently not happy with long URLs and plugins
+  # POST /plans/1/phase_edition_instances/1/export
   def export
     if params[:doc].blank?
       redirect_to output_plan_layer_path(@plan, @phase_edition_instance)
